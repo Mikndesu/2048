@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(2048)
-add_executable(2048 main.cpp)
+add_executable(2048 main.cpp game.cpp game_board.cpp)
 
 set(CMAKE_CXX_COMPILER clang++)
 if(WIN32)
@@ -12,6 +12,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 add_definitions(-Wall -Wextra -O2)
 endif()
 
-add_subdirectory(libs)
-
-# target_link_libraries(download_vimeo vimeocore)
+target_link_libraries(2048 -lncurses)
