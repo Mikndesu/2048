@@ -9,7 +9,7 @@ set(CMAKE_SYSTEM_PROCESSOR x64)
 endif()
 if(UNIX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
-add_definitions(-Wall -Wextra -O2)
+add_definitions(-Wall -Wextra -Wno-reorder-ctor -O2 )
 endif()
 
 target_link_libraries(2048 -lncurses)
