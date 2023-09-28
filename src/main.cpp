@@ -1,7 +1,9 @@
+#include <ncurses.h>
+
+#include <cmath>
 #include <iostream>
 #include <memory>
-#include <cmath>
-#include <ncurses.h>
+
 #include "headers/game.hpp"
 
 int main() {

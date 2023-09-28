@@ -1,13 +1,15 @@
 #pragma once
 
 #include <memory>
+
 #include "game_board.hpp"
 
 class Game {
-public:
+   public:
     Game();
     ~Game();
     void start();
-private:
+
+   private:
     std::unique_ptr<GameBoard> gameBoard = nullptr;
 };
