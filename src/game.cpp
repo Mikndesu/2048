@@ -2,7 +2,7 @@
 
 #include <ncurses.h>
 
-Game::Game() { this->gameBoard = std::make_unique<GameBoard>(0, 0, 4); }
+Game::Game() { this->gameBoard = std::make_unique<GameBoard>(0, 0, 3, 7); }
 
 Game::~Game() {}
 
