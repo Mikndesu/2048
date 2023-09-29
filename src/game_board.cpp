@@ -3,6 +3,7 @@
 #include <ncurses.h>
 
 #include <cmath>
+#include <memory>
 #include <string>
 
 GameBoard::GameBoard(const int y, const int x, const int height,
