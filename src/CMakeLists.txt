@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(2048)
-add_executable(2048 main.cpp game.cpp game_board.cpp)
+add_executable(2048 main.cpp game.cpp game_board.cpp game_board_state.cpp)
 
 set(CMAKE_CXX_COMPILER clang++)
 if(WIN32)
