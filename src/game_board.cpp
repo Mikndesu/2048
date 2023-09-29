@@ -17,6 +17,7 @@ GameBoard::GameBoard(const int y, const int x, const int height,
       game_board_state(std::make_unique<GameBoardState>()) {
     initscr();
     noecho();
+    keypad(stdscr, TRUE);
     curs_set(0);
 }
 
