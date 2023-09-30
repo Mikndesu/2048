@@ -2,6 +2,7 @@
 #include <memory>
 
 #include "game_board_state.hpp"
+#include "direction.hpp"
 
 class GameBoard {
    public:
@@ -9,6 +10,7 @@ class GameBoard {
               const int height = 1);
     ~GameBoard();
     void render();
+    void move(const Utility2048::Direction direction);
 
    private:
     int x = 0;
