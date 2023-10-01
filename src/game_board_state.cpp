@@ -13,10 +13,6 @@ GameBoardState::GameBoardState()
     this->initialiseCertainBox(r2(random), r2(random));
 }
 
-GameBoardState::~GameBoardState() {}
-
-void GameBoardState::updateCertainBox(const int y, const int x) {}
-
 void GameBoardState::move(const Utility2048::Direction direction) {
     using namespace Utility2048;
     bool isMoveSuccessful = false;

@@ -13,9 +13,7 @@
 class GameBoardState {
    public:
     GameBoardState();
-    ~GameBoardState();
     std::array<std::array<int, 4>, 4>& getState();
-    void updateCertainBox(const int y, const int x);
     void move(const Utility2048::Direction direction);
 
    private:
