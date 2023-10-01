@@ -1,14 +1,15 @@
 #pragma once
 
-#include <iostream>
-#include <array>
-#include <numeric>
-#include <random>
-#include <memory>
 #include <ncurses.h>
 
-#include "direction.hpp"
+#include <array>
+#include <iostream>
+#include <memory>
+#include <numeric>
+#include <random>
+
 #include "array_helper.hpp"
+#include "direction.hpp"
 
 class GameBoardState {
    public:
@@ -26,8 +27,8 @@ class GameBoardState {
     std::uniform_int_distribution<int> r2{0, 3};
     void updateCertainBoxInternal(const int y, const int x, const int value);
     void initialiseCertainBox(const int y, const int x);
-    int newTileValue();
     void moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessful);
+    int newTileValue();
     bool isInitialised(const int y, const int x);
-    bool isInitialised(const std::array<int,4>& array, const int index);
+    bool isInitialised(const std::array<int, 4>& array, const int index);
 };
