@@ -29,6 +29,7 @@ class GameBoardState {
     void updateCertainBoxInternal(const int y, const int x, const int value);
     void initialiseCertainBox(const int y, const int x);
     int newTileValue();
+    void moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessful);
     bool isInitialised(const int y, const int x);
     bool isInitialised(const std::array<int,4>& array, const int index);
 };

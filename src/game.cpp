@@ -13,9 +13,9 @@ void Game::start() {
         this->gameBoard->render();
         int ch = getch();
         if (ch == 'q') break;
-        if(ch == KEY_UP) break;
-        if(ch == KEY_DOWN) break;
+        if(ch == KEY_UP) this->gameBoard->move(Direction::UP);
+        if(ch == KEY_DOWN) this->gameBoard->move(Direction::DOWN);
         if(ch == KEY_RIGHT) this->gameBoard->move(Direction::RIGHT);
-        if(ch == KEY_LEFT) break;
+        if(ch == KEY_LEFT) this->gameBoard->move(Direction::LEFT);
     }
 }

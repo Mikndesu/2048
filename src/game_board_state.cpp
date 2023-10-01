@@ -19,57 +19,78 @@ void GameBoardState::updateCertainBox(const int y, const int x) {}
 
 void GameBoardState::move(const Utility2048::Direction direction) {
     using namespace Utility2048;
-    switch (bool isMoveSuccessful = false; direction) {
-        case Direction::UP:
+    bool isMoveSuccessful = false;
+    switch (direction) {
+            case Direction::UP:
+            for (int i = 0; i < 4; ++i) {
+                auto column = array_helper->getCertainColumn(i, this->game_state);
+                std::reverse(column.begin(), column.end());
+                this->moveInternal(column, isMoveSuccessful);
+                std::reverse(column.begin(), column.end());
+                array_helper->setCertainColumn(i, column, this->game_state);
+            }
             break;
         case Direction::DOWN:
+            for (int i = 0; i < 4; ++i) {
+                auto column = array_helper->getCertainColumn(i, this->game_state);
+                this->moveInternal(column, isMoveSuccessful);
+                array_helper->setCertainColumn(i, column, this->game_state);
+            }
             break;
         case Direction::RIGHT:
             for (int i = 0; i < 4; ++i) {
                 auto row = array_helper->getCertainRow(i, this->game_state);
-                // def_prog_mode();
-                // endwin();
-                // std::cout << row[0] << row[1] << row[2] << row[3] <<
-                // std::endl; reset_prog_mode(); refresh();
-                auto find_matching_pair = [&](int from) {
-                    for(int to = from + 1; to < 4; ++to) {
-                        if(row[from] == 0) {
-                            break;
-                        } else if(row[to] != 0) {
-                            if(row[to] == row[from]) {
-                                return to;
-                            }
-                            break;
-                        }
-                    }
-                    return -1;
-                };
-                auto merge_pair = [&](int from, int to) mutable {
-                    if(row[to] == row[from]) {
-                        row[to] = row[to] * 2;
-                        row[from] = 0;
-                        isMoveSuccessful = true;
-                    }
-                };
-                for (int from = 0; from < 4; ++from) {
-                    if (int to = find_matching_pair(from); to != -1) {
-                        merge_pair(from, to);
-                        from += 2;
-                    }
-                }
-                for (int j = 0; j < 3; ++j) {
-                    if (row[j + 1] == 0) {
-                        row[j + 1] = row[j];
-                        row[j] = 0;
-                        isMoveSuccessful = true;
-                    }
-                }
+                this->moveInternal(row, isMoveSuccessful);
                 array_helper->setCertainRow(i, row, this->game_state);
             }
-            if(isMoveSuccessful) this->initialiseCertainBox(r2(random), r2(random));
             break;
         case Direction::LEFT:
+            for (int i = 0; i < 4; ++i) {
+                auto row = array_helper->getCertainRow(i, this->game_state);
+                std::reverse(row.begin(), row.end());
+                this->moveInternal(row, isMoveSuccessful);
+                std::reverse(row.begin(), row.end());
+                array_helper->setCertainRow(i, row, this->game_state);
+            }
             break;
+    }
+    if (isMoveSuccessful)
+                this->initialiseCertainBox(r2(random), r2(random));
+}
+
+void GameBoardState::moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessful) {
+    auto find_matching_pair = [&](int from) {
+        for (int to = from + 1; to < 4; ++to) {
+            if (arr[from] == 0) {
+                break;
+            } else if (arr[to] != 0) {
+                if (arr[to] == arr[from]) {
+                    return to;
+                }
+                break;
+            }
+        }
+        return -1;
+    };
+    auto merge_pair = [&](int from, int to) mutable {
+        if (arr[to] == arr[from]) {
+            arr[to] = arr[to] * 2;
+            arr[from] = 0;
+            isMoveSuccessful = true;
+        }
+    };
+    for (int from = 0; from < 4; ++from) {
+        if (int to = find_matching_pair(from); to != -1) {
+            merge_pair(from, to);
+            from += 2;
+        }
+    }
+    for (int j = 0; j < 3; ++j) {
+        if (arr[j + 1] == 0) {
+            arr[j + 1] = arr[j];
+            arr[j] = 0;
+            isMoveSuccessful = true;
+        }
     }
 }
 
