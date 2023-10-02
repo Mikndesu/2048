@@ -49,7 +49,8 @@ void GameBoardState::move(const Utility2048::Direction direction) {
             }
             break;
     }
-    if(isMoveSuccessful) this->initialiseCertainBox(r2(random), r2(random));
+    if(isMoveSuccessful)
+        this->initialiseCertainBox(r2(random), r2(random));
 }
 
 void GameBoardState::moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessful) {

@@ -14,11 +14,21 @@ void Game::start() {
     using namespace Utility2048;
     while(true) {
         this->gameBoard->render();
-        int ch = getch();
-        if(ch == 'q') break;
-        if(ch == KEY_UP) this->gameBoard->move(Direction::UP);
-        if(ch == KEY_DOWN) this->gameBoard->move(Direction::DOWN);
-        if(ch == KEY_RIGHT) this->gameBoard->move(Direction::RIGHT);
-        if(ch == KEY_LEFT) this->gameBoard->move(Direction::LEFT);
+        switch(int ch = getch(); ch) {
+            case KEY_UP:
+                this->gameBoard->move(Direction::UP);
+                break;
+            case KEY_DOWN:
+                this->gameBoard->move(Direction::DOWN);
+                break;
+            case KEY_RIGHT:
+                this->gameBoard->move(Direction::RIGHT);
+                break;
+            case KEY_LEFT:
+                this->gameBoard->move(Direction::LEFT);
+                break;
+            case 'q':
+                return;
+        }
     }
 }

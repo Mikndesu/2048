@@ -64,8 +64,8 @@ void GameBoard::move(const Utility2048::Direction direction) {
 
 void GameBoard::ReflectGameBoardState() {
     const auto state = this->game_board_state->getState();
-    constexpr auto margin = [](int n) { 
-        return n == 1 ? 1 : static_cast<int>(std::floor(n / 2)) + 1; 
+    constexpr auto margin = [](int n) {
+        return n == 1 ? 1 : static_cast<int>(std::floor(n / 2)) + 1;
     };
     for(int i = 0; i < TO_BE_RENDERED; ++i) {
         for(int j = 0; j < TO_BE_RENDERED; ++j) {
