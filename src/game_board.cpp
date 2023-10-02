@@ -69,8 +69,13 @@ void GameBoard::ReflectGameBoardState() {
     };
     for(int i = 0; i < TO_BE_RENDERED; ++i) {
         for(int j = 0; j < TO_BE_RENDERED; ++j) {
-            const auto str = std::to_string(state.at(i).at(j));
-            mvaddstr(y + margin(this->height) + j * (this->height + 1), x + margin(this->width) + (this->width + 1) * i, str.c_str());
+            auto char_to_be_rendered = [&]() {
+                int n = state.at(i).at(j);
+                std::string str = (n != 0) ? std::to_string(n) : "";
+                return str;
+            };
+            mvaddstr(y + margin(this->height) + j * (this->height + 1), x + margin(this->width) + (this->width + 1) * i,
+                     char_to_be_rendered().c_str());
         }
     }
 }
