@@ -25,7 +25,7 @@ GameBoard::~GameBoard() {
 }
 
 void GameBoard::render() {
-    clear();
+    erase();
     this->RenderBackGroundGrid();
     this->ReflectGameBoardState();
     refresh();
