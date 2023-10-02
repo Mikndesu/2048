@@ -1,11 +1,13 @@
 ---
-BasedOnStyle:  Google
+BasedOnStyle: Google
 IndentWidth: 4
 ---
 Language: Cpp
 ColumnLimit: 150
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortEnumsOnASingleLine: false
 SpaceBeforeParens: Custom
 SpaceBeforeParensOptions:
   AfterControlStatements: false
