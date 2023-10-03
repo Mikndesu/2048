@@ -80,11 +80,16 @@ void GameBoardState::moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessfu
             from += 2;
         }
     }
-    for(int j = 0; j < 3; ++j) {
-        if(arr[j + 1] == 0) {
-            arr[j + 1] = arr[j];
-            arr[j] = 0;
-            isMoveSuccessful = true;
+    for(auto j = arr.rbegin(); j != arr.rend(); ++j) {
+        if(*j == 0) {
+            for(auto jj = j; jj != arr.rend(); ++jj) {
+                if(*jj != 0) {
+                    *j = *jj;
+                    *jj = 0;
+                    isMoveSuccessful = true;
+                    break;
+                }
+            }
         }
     }
 }
