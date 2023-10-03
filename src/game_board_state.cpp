@@ -8,6 +8,7 @@ GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>())
     random.seed(std::time(NULL));
     // initialise Game Board State
     this->game_state.fill(std::array<int, 4>{0, 0, 0, 0});
+    // Game should start with two tiles initialised.
     this->initialiseCertainTile(r2(random), r2(random));
     this->initialiseCertainTile(r2(random), r2(random));
 }
@@ -18,6 +19,8 @@ void GameBoardState::moveTile(const Utility2048::Direction direction) {
     switch(direction) {
         case Direction::UP:
             for(int i = 0; i < 4; ++i) {
+                /* passing a reversed array enables you to implement moving in the opposite direction
+                with the same function */
                 auto column = array_helper->getCertainColumn(i, this->game_state);
                 std::reverse(column.begin(), column.end());
                 this->moveTilesInternal(column, isMoveSuccessful);
@@ -41,6 +44,7 @@ void GameBoardState::moveTile(const Utility2048::Direction direction) {
             break;
         case Direction::LEFT:
             for(int i = 0; i < 4; ++i) {
+                // same logic with UP
                 auto row = array_helper->getCertainRow(i, this->game_state);
                 std::reverse(row.begin(), row.end());
                 this->moveTilesInternal(row, isMoveSuccessful);

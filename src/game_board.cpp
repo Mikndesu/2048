@@ -16,6 +16,7 @@ GameBoard::GameBoard(const int y, const int x, const int height, const int width
       game_board_state(std::make_unique<GameBoardState>()) {
     initscr();
     noecho();
+    // to detect special keys like Enter key.
     keypad(stdscr, TRUE);
     curs_set(0);
 }
