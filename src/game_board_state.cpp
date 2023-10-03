@@ -8,11 +8,11 @@ GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>())
     random.seed(std::time(NULL));
     // initialise Game Board State
     this->game_state.fill(std::array<int, 4>{0, 0, 0, 0});
-    this->initialiseCertainBox(r2(random), r2(random));
-    this->initialiseCertainBox(r2(random), r2(random));
+    this->initialiseCertainTile(r2(random), r2(random));
+    this->initialiseCertainTile(r2(random), r2(random));
 }
 
-void GameBoardState::move(const Utility2048::Direction direction) {
+void GameBoardState::moveTile(const Utility2048::Direction direction) {
     using namespace Utility2048;
     bool isMoveSuccessful = false;
     switch(direction) {
@@ -20,7 +20,7 @@ void GameBoardState::move(const Utility2048::Direction direction) {
             for(int i = 0; i < 4; ++i) {
                 auto column = array_helper->getCertainColumn(i, this->game_state);
                 std::reverse(column.begin(), column.end());
-                this->moveInternal(column, isMoveSuccessful);
+                this->moveTilesInternal(column, isMoveSuccessful);
                 std::reverse(column.begin(), column.end());
                 array_helper->setCertainColumn(i, column, this->game_state);
             }
@@ -28,14 +28,14 @@ void GameBoardState::move(const Utility2048::Direction direction) {
         case Direction::DOWN:
             for(int i = 0; i < 4; ++i) {
                 auto column = array_helper->getCertainColumn(i, this->game_state);
-                this->moveInternal(column, isMoveSuccessful);
+                this->moveTilesInternal(column, isMoveSuccessful);
                 array_helper->setCertainColumn(i, column, this->game_state);
             }
             break;
         case Direction::RIGHT:
             for(int i = 0; i < 4; ++i) {
                 auto row = array_helper->getCertainRow(i, this->game_state);
-                this->moveInternal(row, isMoveSuccessful);
+                this->moveTilesInternal(row, isMoveSuccessful);
                 array_helper->setCertainRow(i, row, this->game_state);
             }
             break;
@@ -43,17 +43,17 @@ void GameBoardState::move(const Utility2048::Direction direction) {
             for(int i = 0; i < 4; ++i) {
                 auto row = array_helper->getCertainRow(i, this->game_state);
                 std::reverse(row.begin(), row.end());
-                this->moveInternal(row, isMoveSuccessful);
+                this->moveTilesInternal(row, isMoveSuccessful);
                 std::reverse(row.begin(), row.end());
                 array_helper->setCertainRow(i, row, this->game_state);
             }
             break;
     }
     if(isMoveSuccessful)
-        this->initialiseCertainBox(r2(random), r2(random));
+        this->initialiseCertainTile(r2(random), r2(random));
 }
 
-void GameBoardState::moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessful) {
+void GameBoardState::moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSuccessful) {
     auto find_matching_pair = [&](int from) {
         for(int to = from + 1; to < 4; ++to) {
             if(arr[from] == 0) {
@@ -94,15 +94,15 @@ void GameBoardState::moveInternal(std::array<int, 4>& arr, bool& isMoveSuccessfu
     }
 }
 
-void GameBoardState::initialiseCertainBox(const int y, const int x) {
-    if(this->isInitialised(y, x)) {
-        this->initialiseCertainBox(r2(random), r2(random));
+void GameBoardState::initialiseCertainTile(const int y, const int x) {
+    if(this->isTileInitialised(y, x)) {
+        this->initialiseCertainTile(r2(random), r2(random));
         return;
     }
-    updateCertainBoxInternal(y, x, this->newTileValue());
+    updateCertainTileInternal(y, x, this->newTileValue());
 }
 
-void GameBoardState::updateCertainBoxInternal(const int y, const int x, const int value) {
+void GameBoardState::updateCertainTileInternal(const int y, const int x, const int value) {
     this->game_state[y][x] = value;
 }
 
@@ -111,11 +111,11 @@ int GameBoardState::newTileValue() {
     return r1(random) == 1 ? 4 : 2;
 }
 
-bool GameBoardState::isInitialised(const int y, const int x) {
+bool GameBoardState::isTileInitialised(const int y, const int x) {
     return this->game_state[y][x] != 0;
 }
 
-bool GameBoardState::isInitialised(const std::array<int, 4>& array, const int index) {
+bool GameBoardState::isTileInitialised(const std::array<int, 4>& array, const int index) {
     return array[index] != 0;
 }
 

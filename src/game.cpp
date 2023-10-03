@@ -16,16 +16,16 @@ void Game::start() {
         this->gameBoard->render();
         switch(int ch = getch(); ch) {
             case KEY_UP:
-                this->gameBoard->move(Direction::UP);
+                this->gameBoard->moveTile(Direction::UP);
                 break;
             case KEY_DOWN:
-                this->gameBoard->move(Direction::DOWN);
+                this->gameBoard->moveTile(Direction::DOWN);
                 break;
             case KEY_RIGHT:
-                this->gameBoard->move(Direction::RIGHT);
+                this->gameBoard->moveTile(Direction::RIGHT);
                 break;
             case KEY_LEFT:
-                this->gameBoard->move(Direction::LEFT);
+                this->gameBoard->moveTile(Direction::LEFT);
                 break;
             case 'q':
                 return;

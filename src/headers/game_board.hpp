@@ -9,7 +9,7 @@ class GameBoard {
     GameBoard(const int y = 0, const int x = 0, const int width = 4, const int height = 1);
     ~GameBoard();
     void render();
-    void move(const Utility2048::Direction direction);
+    void moveTile(const Utility2048::Direction direction);
 
    private:
     int x = 0;

@@ -58,8 +58,8 @@ void GameBoard::RenderBackGroundGrid() {
     mvaddch(y + VERTICAL_SIDE_LENGTH, HORIZONTAL_SIDE_LENGTH, ACS_LRCORNER);
 }
 
-void GameBoard::move(const Utility2048::Direction direction) {
-    this->game_board_state->move(direction);
+void GameBoard::moveTile(const Utility2048::Direction direction) {
+    this->game_board_state->moveTile(direction);
 }
 
 void GameBoard::ReflectGameBoardState() {
