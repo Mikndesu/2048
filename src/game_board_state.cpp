@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 
+#include <algorithm>
 #include <ctime>
 
 GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>()) {
