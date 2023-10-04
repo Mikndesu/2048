@@ -22,4 +22,5 @@ class GameBoard {
     std::unique_ptr<GameBoardState> game_board_state = nullptr;
     void RenderBackGroundGrid();
     void ReflectGameBoardState();
+    void putStrWithColour(int i);
 };

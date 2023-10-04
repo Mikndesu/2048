@@ -18,6 +18,8 @@ GameBoard::GameBoard(const int y, const int x, const int height, const int width
     noecho();
     // to detect special keys like Enter key.
     keypad(stdscr, TRUE);
+    // to render coloured character.
+    start_color();
     curs_set(0);
 }
 
