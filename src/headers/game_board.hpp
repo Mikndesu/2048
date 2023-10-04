@@ -19,8 +19,10 @@ class GameBoard {
     const int TO_BE_RENDERED = 4;
     const int VERTICAL_SIDE_LENGTH;
     const int HORIZONTAL_SIDE_LENGTH;
+    int getMatchingColour(int i);
     std::unique_ptr<GameBoardState> game_board_state = nullptr;
     void RenderBackGroundGrid();
     void ReflectGameBoardState();
-    void putStrWithColour(int i);
+    void putColouredStr(int i);
+    void initialiseColourPairs();
 };

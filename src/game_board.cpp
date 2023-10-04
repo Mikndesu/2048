@@ -6,6 +6,8 @@
 #include <memory>
 #include <string>
 
+#include "headers/colour.hpp"
+
 GameBoard::GameBoard(const int y, const int x, const int height, const int width)
     : y(y),
       x(x),
@@ -21,6 +23,7 @@ GameBoard::GameBoard(const int y, const int x, const int height, const int width
     // to render coloured character.
     start_color();
     curs_set(0);
+    this->initialiseColourPairs();
 }
 
 GameBoard::~GameBoard() {
@@ -72,13 +75,56 @@ void GameBoard::ReflectGameBoardState() {
     };
     for(int i = 0; i < TO_BE_RENDERED; ++i) {
         for(int j = 0; j < TO_BE_RENDERED; ++j) {
+            int n = state.at(i).at(j);
+            auto colour = getMatchingColour(n);
             auto char_to_be_rendered = [&]() {
-                int n = state.at(i).at(j);
                 std::string str = (n != 0) ? std::to_string(n) : "";
                 return str;
             };
+            attron(COLOR_PAIR(colour));
             mvaddstr(y + margin(this->height) + j * (this->height + 1), x + margin(this->width) + (this->width + 1) * i,
                      char_to_be_rendered().c_str());
+            attroff(COLOR_PAIR(colour));
         }
+    }
+}
+
+void GameBoard::initialiseColourPairs() {
+    using namespace Utility2048;
+    using enum Colour;
+    // for tile 2 and gameboard
+    init_pair(getIntValue(WHITE), COLOR_WHITE, COLOR_BLACK);
+    // for tile 4
+    init_pair(getIntValue(GREEN), COLOR_GREEN, COLOR_BLACK);
+    // for tile 8
+    init_pair(getIntValue(BLUE), COLOR_BLUE, COLOR_BLACK);
+    // for tile 16
+    init_pair(getIntValue(MAGENTA), COLOR_MAGENTA, COLOR_BLACK);
+    // for tile 32
+    init_pair(getIntValue(CYAN), COLOR_CYAN, COLOR_BLACK);
+    // for tile 64
+    init_pair(getIntValue(RED), COLOR_RED, COLOR_BLACK);
+    // for tile 128 and more
+    init_pair(getIntValue(YELLOW), COLOR_YELLOW, COLOR_BLACK);
+}
+
+int GameBoard::getMatchingColour(int i) {
+    using namespace Utility2048;
+    using enum Colour;
+    switch(i) {
+        case 2:
+            return getIntValue(WHITE);
+        case 4:
+            return getIntValue(GREEN);
+        case 8:
+            return getIntValue(BLUE);
+        case 16:
+            return getIntValue(MAGENTA);
+        case 32:
+            return getIntValue(CYAN);
+        case 64:
+            return getIntValue(RED);
+        default:
+            return getIntValue(YELLOW);
     }
 }
