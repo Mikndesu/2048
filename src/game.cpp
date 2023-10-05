@@ -27,8 +27,16 @@ void Game::start() {
             case KEY_LEFT:
                 this->gameBoard->moveTile(Direction::LEFT);
                 break;
+            case 'r':
+                this->startNewGame();
+                return;
             case 'q':
                 return;
         }
     }
+}
+
+void Game::startNewGame() {
+    this->gameBoard->clear();
+    this->start();
 }

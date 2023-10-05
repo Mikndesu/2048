@@ -30,6 +30,10 @@ GameBoard::~GameBoard() {
     endwin();
 }
 
+void GameBoard::clear() {
+    this->game_board_state->clearState();
+}
+
 void GameBoard::render() {
     erase();
     this->RenderBackGroundGrid();

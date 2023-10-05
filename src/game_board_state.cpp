@@ -7,6 +7,14 @@
 
 GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>()) {
     random.seed(std::time(NULL));
+    this->initialiseGameState();
+}
+
+void GameBoardState::clearState() {
+    this->initialiseGameState();
+}
+
+void GameBoardState::initialiseGameState() {
     // initialise Game Board State
     this->game_state.fill(std::array<int, 4>{0, 0, 0, 0});
     // Game should start with two tiles initialised.

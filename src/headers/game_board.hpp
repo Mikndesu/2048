@@ -8,6 +8,7 @@ class GameBoard {
    public:
     GameBoard(const int y = 0, const int x = 0, const int width = 4, const int height = 1);
     ~GameBoard();
+    void clear();
     void render();
     void moveTile(const Utility2048::Direction direction);
 

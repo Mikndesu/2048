@@ -16,6 +16,7 @@ class GameBoardState {
     GameBoardState();
     std::array<std::array<int, 4>, 4>& getState();
     void moveTile(const Utility2048::Direction direction);
+    void clearState();
 
    private:
     std::array<std::array<int, 4>, 4> game_state;
@@ -28,6 +29,7 @@ class GameBoardState {
     void updateCertainTileInternal(const int y, const int x, const int value);
     void initialiseCertainTile(const int y, const int x);
     void moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSuccessful);
+    void initialiseGameState();
     int newTileValue();
     bool isTileInitialised(const int y, const int x);
     bool isTileInitialised(const std::array<int, 4>& array, const int index);
