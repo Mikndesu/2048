@@ -9,8 +9,10 @@ class Game {
     Game();
     ~Game();
     void start();
-    void startNewGame();
 
    private:
     std::unique_ptr<GameBoard> gameBoard = nullptr;
+    void startNewGame();
+    void restoreGameProgress();
+    void saveGameProgress();
 };

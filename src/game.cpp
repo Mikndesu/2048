@@ -27,8 +27,14 @@ void Game::start() {
             case KEY_LEFT:
                 this->gameBoard->moveTile(Direction::LEFT);
                 break;
-            case 'r':
+            case 'a':
                 this->startNewGame();
+                return;
+            case 'p':
+                this->saveGameProgress();
+                return;
+            case 'r':
+                this->restoreGameProgress();
                 return;
             case 'q':
                 return;
@@ -40,3 +46,7 @@ void Game::startNewGame() {
     this->gameBoard->clear();
     this->start();
 }
+
+void Game::saveGameProgress() {}
+
+void Game::restoreGameProgress() {}
