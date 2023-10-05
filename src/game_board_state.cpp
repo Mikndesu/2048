@@ -59,6 +59,9 @@ void GameBoardState::moveTile(const Utility2048::Direction direction) {
 }
 
 void GameBoardState::moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSuccessful) {
+    // if head value is 0, stop looping
+    // also when the same value is found with the head,
+    // return its index, otherwise -1;
     auto find_matching_pair = [&](int from) {
         for(int to = from + 1; to < 4; ++to) {
             if(arr[from] == 0) {
