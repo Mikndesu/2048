@@ -70,8 +70,12 @@ void GameBoard::moveTile(const Utility2048::Direction direction) {
 
 void GameBoard::ReflectGameBoardState() {
     const auto state = this->game_board_state->getState();
-    constexpr auto margin = [](int n) {
-        return n == 1 ? 1 : static_cast<int>(std::floor(n / 2)) + 1;
+    constexpr auto margin_y = [](int i) {
+        return i == 1 ? 1 : static_cast<int>(std::floor(i / 2)) + 1;
+    };
+    auto margin_x = [](int i, int n) {
+        int addtional_margin = (n >= 128) ? -1 : 0;
+        return addtional_margin + (i == 1 ? 1 : static_cast<int>(std::floor(i / 2)) + 1);
     };
     for(int i = 0; i < TO_BE_RENDERED; ++i) {
         for(int j = 0; j < TO_BE_RENDERED; ++j) {
@@ -82,7 +86,7 @@ void GameBoard::ReflectGameBoardState() {
                 return str;
             };
             attron(COLOR_PAIR(colour));
-            mvaddstr(y + margin(this->height) + j * (this->height + 1), x + margin(this->width) + (this->width + 1) * i,
+            mvaddstr(y + margin_y(this->height) + j * (this->height + 1), x + margin_x(this->width, n) + (this->width + 1) * i,
                      char_to_be_rendered().c_str());
             attroff(COLOR_PAIR(colour));
         }
