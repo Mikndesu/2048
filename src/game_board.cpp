@@ -97,7 +97,7 @@ void GameBoard::initialiseColourPairs() {
     // for tile 4
     init_pair(getIntValue(GREEN), COLOR_GREEN, COLOR_BLACK);
     // for tile 8
-    init_pair(getIntValue(BLUE), COLOR_BLUE, COLOR_BLACK);
+    init_pair(getIntValue(LIGHT_GREEN), 10, COLOR_BLACK);
     // for tile 16
     init_pair(getIntValue(MAGENTA), COLOR_MAGENTA, COLOR_BLACK);
     // for tile 32
@@ -117,7 +117,7 @@ int GameBoard::getMatchingColour(int i) {
         case 4:
             return getIntValue(GREEN);
         case 8:
-            return getIntValue(BLUE);
+            return getIntValue(LIGHT_GREEN);
         case 16:
             return getIntValue(MAGENTA);
         case 32:

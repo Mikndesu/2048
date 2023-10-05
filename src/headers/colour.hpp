@@ -2,7 +2,7 @@ namespace Utility2048 {
 enum class Colour {
     WHITE,
     GREEN,
-    BLUE,
+    LIGHT_GREEN,
     MAGENTA,
     CYAN,
     RED,
