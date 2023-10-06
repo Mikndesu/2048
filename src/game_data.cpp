@@ -16,8 +16,8 @@ GameData::GameData() {
         fs::create_directories(config_dir);
     } catch(fs::filesystem_error e) {
     }
-    ifs.open(this->config_path, std::ios::in || std::ios::binary);
-    ofs.open(this->config_path, std::ios::out || std::ios::binary);
+    ifs.open(this->config_path, std::ios::in | std::ios::binary);
+    ofs.open(this->config_path, std::ios::out | std::ios::binary);
 }
 
 void GameData::serialise(std::array<std::array<int, 4>, 4>& array) {
