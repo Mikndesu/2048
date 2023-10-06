@@ -15,7 +15,8 @@ GameBoard::GameBoard(const int y, const int x, const int height, const int width
       height(height),
       HORIZONTAL_SIDE_LENGTH((this->width + 1) * TO_BE_RENDERED),
       VERTICAL_SIDE_LENGTH((this->height + 1) * TO_BE_RENDERED),
-      game_board_state(std::make_unique<GameBoardState>()) {
+      game_board_state(std::make_unique<GameBoardState>()),
+      game_data(std::make_unique<GameData>()) {
     initscr();
     noecho();
     // to detect special keys like Enter key.
@@ -27,6 +28,7 @@ GameBoard::GameBoard(const int y, const int x, const int height, const int width
 }
 
 GameBoard::~GameBoard() {
+    this->saveGameProgress();
     endwin();
 }
 
@@ -95,6 +97,14 @@ void GameBoard::ReflectGameBoardState() {
             attroff(COLOR_PAIR(colour));
         }
     }
+}
+
+void GameBoard::saveGameProgress() {
+    this->game_data->serialise(this->game_board_state->getState());
+}
+
+void GameBoard::restoreGameProgress() {
+    this->game_data->deserialise(this->game_board_state->getState());
 }
 
 void GameBoard::initialiseColourPairs() {

@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <filesystem>
 #include <fstream>
 
@@ -10,6 +11,5 @@ class GameData {
 
    private:
     std::filesystem::path config_path;
-    std::ofstream ofs;
-    std::ifstream ifs;
+    std::fstream fstream;
 };

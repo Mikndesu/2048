@@ -30,7 +30,7 @@ void Game::start() {
             case 'a':
                 this->startNewGame();
                 return;
-            case 'p':
+            case 's':
                 this->saveGameProgress();
                 return;
             case 'r':
@@ -47,6 +47,11 @@ void Game::startNewGame() {
     this->start();
 }
 
-void Game::saveGameProgress() {}
+void Game::saveGameProgress() {
+    this->gameBoard->saveGameProgress();
+}
 
-void Game::restoreGameProgress() {}
+void Game::restoreGameProgress() {
+    this->gameBoard->restoreGameProgress();
+    this->start();
+}

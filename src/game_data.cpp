@@ -1,6 +1,9 @@
 #include "headers/game_data.hpp"
 
+#include <ncurses.h>
+
 #include <cstdlib>
+#include <iostream>
 #include <string>
 
 GameData::GameData() {
@@ -16,22 +19,28 @@ GameData::GameData() {
         fs::create_directories(config_dir);
     } catch(fs::filesystem_error e) {
     }
-    ifs.open(this->config_path, std::ios::in | std::ios::binary);
-    ofs.open(this->config_path, std::ios::out | std::ios::binary);
+    fstream.open(this->config_path, std::ios::in | std::ios::out | std::ios::binary);
+    if(!fstream) {
+        std::ofstream(this->config_path, std::ios::out | std::ios::binary);
+    }
 }
 
+// write down game state to the progress file
 void GameData::serialise(std::array<std::array<int, 4>, 4>& array) {
-    for(const auto& arr : array) {
-        for(const auto& i : arr) {
-            ofs.write((const char*)&i, sizeof(i));
+    fstream.seekg(0);
+    for(auto& arr : array) {
+        for(auto& i : arr) {
+            fstream.write(reinterpret_cast<char*>(&i), sizeof(i));
         }
     }
 }
 
+// read the progress file and overwrite game state
 void GameData::deserialise(std::array<std::array<int, 4>, 4>& array) {
-    for(const auto& arr : array) {
-        for(const auto& i : arr) {
-            ifs.read((char*)&i, sizeof(i));
+    fstream.seekg(0);
+    for(auto& arr : array) {
+        for(auto& i : arr) {
+            fstream.read(reinterpret_cast<char*>(&i), sizeof(i));
         }
     }
 }

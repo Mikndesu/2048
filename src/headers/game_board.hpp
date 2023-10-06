@@ -3,6 +3,7 @@
 
 #include "direction.hpp"
 #include "game_board_state.hpp"
+#include "game_data.hpp"
 
 class GameBoard {
    public:
@@ -11,6 +12,8 @@ class GameBoard {
     void clear();
     void render();
     void moveTile(const Utility2048::Direction direction);
+    void saveGameProgress();
+    void restoreGameProgress();
 
    private:
     int x = 0;
@@ -22,6 +25,7 @@ class GameBoard {
     const int HORIZONTAL_SIDE_LENGTH;
     int getMatchingColour(int i);
     std::unique_ptr<GameBoardState> game_board_state = nullptr;
+    std::unique_ptr<GameData> game_data = nullptr;
     void RenderBackGroundGrid();
     void ReflectGameBoardState();
     void putColouredStr(int i);
