@@ -10,13 +10,16 @@ GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>())
     this->initialiseGameState();
 }
 
-void GameBoardState::clearState() {
+void GameBoardState::clearProgress() {
     this->initialiseGameState();
+    this->current_score = 0;
 }
 
 void GameBoardState::initialiseGameState() {
     // initialise Game Board State
     this->game_state.fill(std::array<int, 4>{0, 0, 0, 0});
+    // initialise Game Score
+    this->current_score = 0;
     // Game should start with two tiles initialised.
     this->initialiseCertainTile(r2(random), r2(random));
     this->initialiseCertainTile(r2(random), r2(random));
@@ -83,16 +86,17 @@ void GameBoardState::moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSucc
         }
         return -1;
     };
-    auto merge_pair = [&](int from, int to) mutable {
+    auto merge_pair = [&](int from, int to, int current_score) mutable {
         if(arr[to] == arr[from]) {
             arr[to] = arr[to] * 2;
             arr[from] = 0;
+            current_score += arr[to];
             isMoveSuccessful = true;
         }
     };
     for(int from = 0; from < 4; ++from) {
         if(int to = find_matching_pair(from); to != -1) {
-            merge_pair(from, to);
+            merge_pair(from, to, this->current_score);
             from += 2;
         }
     }
@@ -137,4 +141,8 @@ bool GameBoardState::isTileInitialised(const std::array<int, 4>& array, const in
 
 std::array<std::array<int, 4>, 4>& GameBoardState::getState() {
     return this->game_state;
+}
+
+int& GameBoardState::getCurrentScore() {
+    return this->current_score;
 }

@@ -15,8 +15,9 @@ class GameBoardState {
    public:
     GameBoardState();
     std::array<std::array<int, 4>, 4>& getState();
+    int& getCurrentScore();
     void moveTile(const Utility2048::Direction direction);
-    void clearState();
+    void clearProgress();
 
    private:
     std::array<std::array<int, 4>, 4> game_state;
@@ -26,6 +27,7 @@ class GameBoardState {
     std::uniform_int_distribution<int> r1{1, 10};
     // Randomiser used for choosing certain box, or lines or rows at random.
     std::uniform_int_distribution<int> r2{0, 3};
+    int current_score;
     void updateCertainTileInternal(const int y, const int x, const int value);
     void initialiseCertainTile(const int y, const int x);
     void moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSuccessful);

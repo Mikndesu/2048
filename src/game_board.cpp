@@ -33,7 +33,7 @@ GameBoard::~GameBoard() {
 }
 
 void GameBoard::clear() {
-    this->game_board_state->clearState();
+    this->game_board_state->clearProgress();
 }
 
 void GameBoard::render() {
@@ -100,11 +100,11 @@ void GameBoard::ReflectGameBoardState() {
 }
 
 void GameBoard::saveGameProgress() {
-    this->game_data->serialise(this->game_board_state->getState());
+    this->game_data->serialise(this->game_board_state->getState(), this->game_board_state->getCurrentScore());
 }
 
 void GameBoard::restoreGameProgress() {
-    this->game_data->deserialise(this->game_board_state->getState());
+    this->game_data->deserialise(this->game_board_state->getState(), this->game_board_state->getCurrentScore());
 }
 
 void GameBoard::initialiseColourPairs() {
