@@ -10,6 +10,10 @@ class GameData {
     void deserialise(std::array<std::array<int, 4>, 4>& array);
 
    private:
-    std::filesystem::path config_path;
+    std::filesystem::path progress_file_path;
     std::fstream fstream;
+    struct Data {
+        int score;
+        char gameProgress[64];
+    };
 };

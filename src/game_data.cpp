@@ -14,14 +14,14 @@ GameData::GameData() {
     std::string home_dir = std::getenv("HOME");
 #endif
     std::string config_dir = home_dir + "/.config/2048";
-    this->config_path = fs::path(config_dir).append("game.progress");
+    this->progress_file_path = fs::path(config_dir).append("progress.dat");
     try {
         fs::create_directories(config_dir);
     } catch(fs::filesystem_error e) {
     }
-    fstream.open(this->config_path, std::ios::in | std::ios::out | std::ios::binary);
+    fstream.open(this->progress_file_path, std::ios::in | std::ios::out | std::ios::binary);
     if(!fstream) {
-        std::ofstream(this->config_path, std::ios::out | std::ios::binary);
+        std::ofstream(this->progress_file_path, std::ios::out | std::ios::binary);
     }
 }
 
