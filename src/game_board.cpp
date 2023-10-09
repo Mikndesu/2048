@@ -40,6 +40,7 @@ void GameBoard::render() {
     erase();
     this->RenderBackGroundGrid();
     this->ReflectGameBoardState();
+    this->reflectGameScore();
     refresh();
 }
 
@@ -97,6 +98,19 @@ void GameBoard::ReflectGameBoardState() {
             attroff(COLOR_PAIR(colour));
         }
     }
+}
+
+void GameBoard::showDescription() {
+    const int origin_y_pos = this->HORIZONTAL_SIDE_LENGTH + 5;
+    const int origin_x_pos = 4;
+}
+
+void GameBoard::reflectGameScore() {
+    const int origin_y_pos = 0;
+    const int origin_x_pos = this->HORIZONTAL_SIDE_LENGTH + 5;
+    constexpr auto message = "Current Score: ";
+    mvaddstr(origin_y_pos, origin_x_pos, message);
+    mvaddstr(origin_y_pos, origin_x_pos + std::strlen(message), std::to_string(this->game_board_state->getCurrentScore()).c_str());
 }
 
 void GameBoard::saveGameProgress() {

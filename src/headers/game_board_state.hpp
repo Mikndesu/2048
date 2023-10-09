@@ -32,6 +32,8 @@ class GameBoardState {
     void initialiseCertainTile(const int y, const int x);
     void moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSuccessful);
     void initialiseGameState();
+    void clearScore();
+    void increaseScore(int add);
     int newTileValue();
     bool isTileInitialised(const int y, const int x);
     bool isTileInitialised(const std::array<int, 4>& array, const int index);

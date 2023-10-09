@@ -28,6 +28,8 @@ class GameBoard {
     std::unique_ptr<GameData> game_data = nullptr;
     void RenderBackGroundGrid();
     void ReflectGameBoardState();
+    void reflectGameScore();
+    void showDescription();
     void putColouredStr(int i);
     void initialiseColourPairs();
 };

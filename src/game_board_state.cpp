@@ -12,7 +12,7 @@ GameBoardState::GameBoardState() : array_helper(std::make_unique<ArrayHelper>())
 
 void GameBoardState::clearProgress() {
     this->initialiseGameState();
-    this->current_score = 0;
+    this->clearScore();
 }
 
 void GameBoardState::initialiseGameState() {
@@ -86,17 +86,17 @@ void GameBoardState::moveTilesInternal(std::array<int, 4>& arr, bool& isMoveSucc
         }
         return -1;
     };
-    auto merge_pair = [&](int from, int to, int current_score) mutable {
+    auto merge_pair = [&, this](int from, int to) mutable {
         if(arr[to] == arr[from]) {
             arr[to] = arr[to] * 2;
             arr[from] = 0;
-            current_score += arr[to];
+            this->increaseScore(arr[to]);
             isMoveSuccessful = true;
         }
     };
     for(int from = 0; from < 4; ++from) {
         if(int to = find_matching_pair(from); to != -1) {
-            merge_pair(from, to, this->current_score);
+            merge_pair(from, to);
             from += 2;
         }
     }
@@ -145,4 +145,12 @@ std::array<std::array<int, 4>, 4>& GameBoardState::getState() {
 
 int& GameBoardState::getCurrentScore() {
     return this->current_score;
+}
+
+void GameBoardState::increaseScore(int add) {
+    this->current_score += add;
+}
+
+void GameBoardState::clearScore() {
+    this->current_score = 0;
 }
