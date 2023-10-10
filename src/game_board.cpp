@@ -3,6 +3,7 @@
 #include <ncurses.h>
 
 #include <cmath>
+#include <cstring>
 #include <memory>
 #include <string>
 
