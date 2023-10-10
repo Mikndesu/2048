@@ -18,7 +18,7 @@ GameData::GameData() {
     this->score_file_path = fs::path(config_dir).append("score.dat");
     try {
         fs::create_directories(config_dir);
-    } catch(fs::filesystem_error e) {
+    } catch(fs::filesystem_error& e) {
     }
     progress.open(this->progress_file_path, std::ios::in | std::ios::out | std::ios::binary);
     score.open(this->score_file_path, std::ios::in | std::ios::out | std::ios::binary);
