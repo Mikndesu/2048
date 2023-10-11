@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 
+#include <array>
 #include <cmath>
 #include <cstring>
 #include <memory>
@@ -39,6 +40,7 @@ void GameBoard::clear() {
 
 void GameBoard::render() {
     erase();
+    this->showDescription();
     this->RenderBackGroundGrid();
     this->ReflectGameBoardState();
     this->reflectGameScore();
@@ -102,13 +104,23 @@ void GameBoard::ReflectGameBoardState() {
 }
 
 void GameBoard::showDescription() {
-    const int origin_y_pos = this->HORIZONTAL_SIDE_LENGTH + 5;
-    const int origin_x_pos = 4;
+    const int origin_y_pos = 3;
+    const int origin_x_pos = this->HORIZONTAL_SIDE_LENGTH + 4;
+    constexpr auto arrow = "Use arrow keys to move tiles.\n";
+    constexpr auto save = "Press 's' to save the current progress.\n";
+    constexpr auto restore = "Press 'r' to restore your previous progress.\n";
+    constexpr auto new_game = "Press 'a' to start a new game.\n";
+    constexpr auto quit = "Press 'q' to quit.\n";
+    std::array<const char*, 5> desc = {arrow, save, restore, new_game, quit};
+    for(int i = 0; const auto& text : desc) {
+        mvaddstr(origin_y_pos + i, origin_x_pos, text);
+        ++i;
+    }
 }
 
 void GameBoard::reflectGameScore() {
-    const int origin_y_pos = 0;
-    const int origin_x_pos = this->HORIZONTAL_SIDE_LENGTH + 5;
+    const int origin_y_pos = 1;
+    const int origin_x_pos = this->HORIZONTAL_SIDE_LENGTH + 4;
     constexpr auto message = "Current Score: ";
     mvaddstr(origin_y_pos, origin_x_pos, message);
     mvaddstr(origin_y_pos, origin_x_pos + std::strlen(message), std::to_string(this->game_board_state->getCurrentScore()).c_str());
