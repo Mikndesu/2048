@@ -72,7 +72,7 @@ impl GameBoard {
                 ACS_LRCORNER(),
             );
             let ch = self.window.getch();
-            if ch.unwrap() == pancurses::Input::KeyEnter {
+            if ch.unwrap() == pancurses::Input::Character('q') {
                 break;
             }
         }
