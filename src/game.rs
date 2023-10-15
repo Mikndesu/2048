@@ -12,11 +12,17 @@ impl Game {
     }
 
     pub fn start(&self) {
+        use pancurses::Input;
         loop {
             self.game_baord.render();
             let ch = self.game_baord.get_input();
-            if ch.unwrap() == pancurses::Input::Character('q') {
-                break;
+            match ch.unwrap() {
+                Input::Character('q') => break,
+                Input::KeyUp => break,
+                Input::KeyDown => break,
+                Input::KeyRight => break,
+                Input::KeyLeft => break,
+                _ => (),
             }
         }
     }
