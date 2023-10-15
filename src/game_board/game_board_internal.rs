@@ -21,7 +21,11 @@ impl GameBoard {
                 self.window.mvaddstr(
                     self.y + margin_y(self.height) + j * (self.height + 1),
                     self.x + margin_y(self.width) + i * (self.width + 1),
-                    n.to_string(),
+                    if n != 0 {
+                        n.to_string()
+                    } else {
+                        "".to_string()
+                    },
                 );
             }
         }
