@@ -12,6 +12,12 @@ impl Game {
     }
 
     pub fn start(&self) {
-        self.game_baord.render();
+        loop {
+            self.game_baord.render();
+            let ch = self.game_baord.get_input();
+            if ch.unwrap() == pancurses::Input::Character('q') {
+                break;
+            }
+        }
     }
 }

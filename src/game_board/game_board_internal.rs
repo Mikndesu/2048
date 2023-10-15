@@ -1,11 +1,32 @@
-use crate::game_board::window_ext::WindowExt;
-use crate::game_board::GameBoard;
+use super::window_ext::WindowExt;
+use super::GameBoard;
 use pancurses::{
     ACS_BTEE, ACS_HLINE, ACS_LLCORNER, ACS_LRCORNER, ACS_LTEE, ACS_PLUS, ACS_RTEE, ACS_TTEE,
     ACS_ULCORNER, ACS_URCORNER, ACS_VLINE,
 };
 
 impl GameBoard {
+    pub(crate) fn reflect_game_board_state(&self) {
+        let state = &self.game_board_state;
+        let margin_y = |i: i32| -> i32 {
+            if i != 1 {
+                (i / 2) + 1
+            } else {
+                1
+            }
+        };
+        for i in 0..self.to_be_rendered {
+            for j in 0..self.to_be_rendered {
+                let n = state.get_state()[i as usize][j as usize];
+                self.window.mvaddstr(
+                    self.y + margin_y(self.height) + j * (self.height + 1),
+                    self.x + margin_y(self.width) + i * (self.width + 1),
+                    n.to_string(),
+                );
+            }
+        }
+    }
+
     pub(crate) fn render_background_grid(&self) {
         for i in 0..=self.to_be_rendered {
             self.window.mvvline(
