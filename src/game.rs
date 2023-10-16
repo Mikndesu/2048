@@ -11,17 +11,18 @@ impl Game {
         }
     }
 
-    pub fn start(&self) {
+    pub fn start(&mut self) {
+        use crate::direction::Direction;
         use pancurses::Input;
         loop {
             self.game_baord.render();
             let ch = self.game_baord.get_input();
             match ch.unwrap() {
                 Input::Character('q') => break,
-                Input::KeyUp => break,
-                Input::KeyDown => break,
-                Input::KeyRight => break,
-                Input::KeyLeft => break,
+                Input::KeyUp => self.game_baord.move_tiles(Direction::UP),
+                Input::KeyDown => self.game_baord.move_tiles(Direction::DOWN),
+                Input::KeyRight => self.game_baord.move_tiles(Direction::RIGHT),
+                Input::KeyLeft => self.game_baord.move_tiles(Direction::LEFT),
                 _ => (),
             }
         }

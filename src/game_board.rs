@@ -1,11 +1,11 @@
-use crate::game_board_state::GameBoardState;
+use crate::{direction::Direction, tiles_state::TilesState};
 use pancurses::{curs_set, endwin, initscr, noecho, Input, Window};
 mod game_board_internal;
 pub(crate) mod window_ext;
 
 pub struct GameBoard {
     window: Window,
-    game_board_state: GameBoardState,
+    game_board_state: TilesState,
     y: i32,
     x: i32,
     height: i32,
@@ -19,7 +19,7 @@ impl GameBoard {
     pub fn new(y: i32, x: i32, height: i32, width: i32) -> Self {
         let window = initscr();
         window.keypad(true);
-        let game_board_state = GameBoardState::new();
+        let game_board_state = TilesState::new();
         let to_be_rendered = 4;
         let vertical_side_length = (height + 1) * to_be_rendered;
         let horizontal_side_length = (width + 1) * to_be_rendered;
@@ -43,8 +43,14 @@ impl GameBoard {
     }
 
     pub fn render(&self) {
+        self.window.erase();
         self.render_background_grid();
         self.reflect_game_board_state();
+        self.window.refresh();
+    }
+
+    pub fn move_tiles(&mut self, direction: Direction) {
+        self.game_board_state.move_tiles(direction)
     }
 }
 
