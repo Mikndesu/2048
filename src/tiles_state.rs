@@ -24,13 +24,14 @@ impl TilesState {
         &self.game_state
     }
 
-    pub fn move_tiles(&mut self, direction: Direction) {
+    pub fn move_tiles(&mut self, direction: Direction) -> bool {
+        let mut is_move_successful = false;
         match direction {
             Direction::UP => {
                 for i in 0..4 {
                     let mut slice = self.game_state.get_column(i);
                     slice.reverse();
-                    slice = self.move_tiles_internal(slice);
+                    (slice, is_move_successful) = self.move_tiles_internal(slice);
                     slice.reverse();
                     self.game_state = self.game_state.set_column(i, slice);
                 }
@@ -38,14 +39,14 @@ impl TilesState {
             Direction::DOWN => {
                 for i in 0..4 {
                     let mut slice = self.game_state.get_column(i);
-                    slice = self.move_tiles_internal(slice);
+                    (slice, is_move_successful) = self.move_tiles_internal(slice);
                     self.game_state = self.game_state.set_column(i, slice);
                 }
             }
             Direction::RIGHT => {
                 for i in 0..4 {
                     let mut slice = self.game_state.get_row(i);
-                    slice = self.move_tiles_internal(slice);
+                    (slice, is_move_successful) = self.move_tiles_internal(slice);
                     self.game_state = self.game_state.set_row(i, slice);
                 }
             }
@@ -53,12 +54,13 @@ impl TilesState {
                 for i in 0..4 {
                     let mut slice = self.game_state.get_row(i);
                     slice.reverse();
-                    slice = self.move_tiles_internal(slice);
+                    (slice, is_move_successful) = self.move_tiles_internal(slice);
                     slice.reverse();
                     self.game_state = self.game_state.set_row(i, slice);
                 }
             }
         }
+        is_move_successful
     }
 }
 

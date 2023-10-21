@@ -26,12 +26,14 @@ impl TilesState {
         }
     }
 
-    pub(crate) fn move_tiles_internal(&self, array: [i32; 4]) -> [i32; 4] {
-        let arr = Self::merge_matching_pair(array);
-        Self::move_after_merge(arr)
+    pub(crate) fn move_tiles_internal(&self, array: [i32; 4]) -> ([i32; 4], bool) {
+        let (arr, flag1) = Self::merge_matching_pair(array);
+        let (arr2, flag2) = Self::move_after_merge(arr);
+        (arr2, flag1 | flag2)
     }
 
-    fn merge_matching_pair(mut arr: [i32; 4]) -> [i32; 4] {
+    fn merge_matching_pair(mut arr: [i32; 4]) -> ([i32; 4], bool) {
+        let mut is_move_successful = false;
         arr.reverse();
         let mut from = 0;
         while from < 4 {
@@ -63,15 +65,17 @@ impl TilesState {
                     arr[from] *= 2;
                     arr[to] = 0;
                     from += 1;
+                    is_move_successful = true;
                 }
             }
             from += 1;
         }
         arr.reverse();
-        return arr;
+        return (arr, is_move_successful);
     }
 
-    fn move_after_merge(mut arr: [i32; 4]) -> [i32; 4] {
+    fn move_after_merge(mut arr: [i32; 4]) -> ([i32; 4], bool) {
+        let mut is_move_successful = false;
         arr.reverse();
         for i in 0..4 {
             if arr[i] == 0 {
@@ -84,11 +88,12 @@ impl TilesState {
                     let equivalent_index = i + j + 1;
                     arr.swap(i, equivalent_index);
                     arr[equivalent_index] = 0;
+                    is_move_successful = true;
                 }
             }
         }
         arr.reverse();
-        return arr;
+        return (arr, is_move_successful);
     }
 
     fn update_certain_tile_internal(&mut self, y: i32, x: i32, value: i32) {
@@ -106,32 +111,63 @@ fn test_move_tiles_internal() {
     let game_board_state = TilesState::new();
     assert_eq!(
         game_board_state.move_tiles_internal([2, 2, 8, 4]),
-        [0, 4, 8, 4]
+        ([0, 4, 8, 4], true)
     );
     assert_eq!(
         game_board_state.move_tiles_internal([2, 2, 2, 2]),
-        [0, 0, 4, 4]
+        ([0, 0, 4, 4], true)
     );
     assert_eq!(
         game_board_state.move_tiles_internal([16, 16, 16, 16]),
-        [0, 0, 32, 32]
+        ([0, 0, 32, 32], true)
     );
 }
 
 #[test]
 fn test_merge_matching_pair() {
-    assert_eq!(TilesState::merge_matching_pair([2, 0, 0, 2]), [0, 0, 0, 4]);
-    assert_eq!(TilesState::merge_matching_pair([2, 2, 0, 2]), [2, 0, 0, 4]);
-    assert_eq!(TilesState::merge_matching_pair([2, 2, 2, 2]), [0, 4, 0, 4]);
-    assert_eq!(TilesState::merge_matching_pair([2, 0, 4, 2]), [2, 0, 4, 2]);
+    assert_eq!(
+        TilesState::merge_matching_pair([2, 0, 0, 2]),
+        ([0, 0, 0, 4], true)
+    );
+    assert_eq!(
+        TilesState::merge_matching_pair([2, 2, 0, 2]),
+        ([2, 0, 0, 4], true)
+    );
+    assert_eq!(
+        TilesState::merge_matching_pair([2, 2, 2, 2]),
+        ([0, 4, 0, 4], true)
+    );
+    assert_eq!(
+        TilesState::merge_matching_pair([2, 0, 4, 2]),
+        ([2, 0, 4, 2], false)
+    );
 }
 
 #[test]
 fn test_move_after_merge() {
-    assert_eq!(TilesState::move_after_merge([2, 0, 0, 2]), [0, 0, 2, 2]);
-    assert_eq!(TilesState::move_after_merge([4, 0, 0, 2]), [0, 0, 4, 2]);
-    assert_eq!(TilesState::move_after_merge([2, 2, 0, 2]), [0, 2, 2, 2]);
-    assert_eq!(TilesState::move_after_merge([2, 2, 0, 0]), [0, 0, 2, 2]);
-    assert_eq!(TilesState::move_after_merge([0, 2, 0, 2]), [0, 0, 2, 2]);
-    assert_eq!(TilesState::move_after_merge([4, 8, 0, 2]), [0, 4, 8, 2]);
+    assert_eq!(
+        TilesState::move_after_merge([2, 0, 0, 2]),
+        ([0, 0, 2, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([4, 0, 0, 2]),
+        ([0, 0, 4, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([2, 2, 0, 2]),
+        ([0, 2, 2, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([2, 2, 0, 0]),
+        ([0, 0, 2, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([0, 2, 0, 2]),
+        ([0, 0, 2, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([4, 8, 0, 2]),
+        ([0, 4, 8, 2], true)
+    );
+    assert_eq!(TilesState::move_after_merge([2; 4]), ([2; 4], false));
 }

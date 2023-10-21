@@ -50,7 +50,9 @@ impl GameBoard {
     }
 
     pub fn move_tiles(&mut self, direction: Direction) {
-        self.game_board_state.move_tiles(direction)
+        if self.game_board_state.move_tiles(direction) {
+            self.game_board_state.initialise_tile();
+        }
     }
 }
 
