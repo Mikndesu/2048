@@ -26,16 +26,38 @@ impl TilesState {
 
     pub fn move_tiles(&mut self, direction: Direction) {
         match direction {
-            Direction::UP => todo!(),
-            Direction::DOWN => todo!(),
-            Direction::RIGHT => {
+            Direction::UP => {
                 for i in 0..4 {
-                    let mut slice = self.game_state.get_certain_row(i);
+                    let mut slice = self.game_state.get_column(i);
+                    slice.reverse();
                     slice = self.move_tiles_internal(slice);
-                    self.game_state = self.game_state.set_certain_row(i, slice);
+                    slice.reverse();
+                    self.game_state = self.game_state.set_column(i, slice);
                 }
             }
-            Direction::LEFT => todo!(),
+            Direction::DOWN => {
+                for i in 0..4 {
+                    let mut slice = self.game_state.get_column(i);
+                    slice = self.move_tiles_internal(slice);
+                    self.game_state = self.game_state.set_column(i, slice);
+                }
+            }
+            Direction::RIGHT => {
+                for i in 0..4 {
+                    let mut slice = self.game_state.get_row(i);
+                    slice = self.move_tiles_internal(slice);
+                    self.game_state = self.game_state.set_row(i, slice);
+                }
+            }
+            Direction::LEFT => {
+                for i in 0..4 {
+                    let mut slice = self.game_state.get_row(i);
+                    slice.reverse();
+                    slice = self.move_tiles_internal(slice);
+                    slice.reverse();
+                    self.game_state = self.game_state.set_row(i, slice);
+                }
+            }
         }
     }
 }
