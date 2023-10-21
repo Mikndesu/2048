@@ -25,11 +25,11 @@ impl Tiles {
         return self.tiles;
     }
 
-    pub fn get_certain_column(&self, i: i32) -> [i32; 4] {
+    pub fn get_column(&self, i: i32) -> [i32; 4] {
         self.tiles[i as usize]
     }
 
-    pub fn get_certain_row(&self, i: i32) -> [i32; 4] {
+    pub fn get_row(&self, i: i32) -> [i32; 4] {
         let mut arr: [i32; 4] = [0; 4];
         arr.iter_mut()
             .zip(self.tiles.iter())
@@ -37,13 +37,13 @@ impl Tiles {
         return arr;
     }
 
-    pub fn set_certain_column(&self, i: i32, column: [i32; 4]) -> Tiles {
+    pub fn set_column(&self, i: i32, column: [i32; 4]) -> Tiles {
         let mut tiles = self.tiles;
         tiles[i as usize] = column;
         Self { tiles }
     }
 
-    pub fn set_certain_row(&self, i: i32, row: [i32; 4]) -> Tiles {
+    pub fn set_row(&self, i: i32, row: [i32; 4]) -> Tiles {
         let mut tiles = self.tiles;
         tiles
             .iter_mut()
@@ -66,20 +66,17 @@ fn test_tiles_index_mut() {
 #[test]
 fn test_get_certain_column() {
     let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
-    assert_eq!(tiles.get_certain_column(2), [1, 2, 3, 4]);
+    assert_eq!(tiles.get_column(2), [1, 2, 3, 4]);
 }
 
 #[test]
 fn test_get_certain_row() {
     let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
-    assert_eq!(tiles.get_certain_row(2), [3; 4]);
+    assert_eq!(tiles.get_row(2), [3; 4]);
 }
 
 #[test]
 fn test_set_certain_row() {
     let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
-    assert_eq!(
-        tiles.set_certain_row(2, [5; 4]).as_array(),
-        [[1, 2, 5, 4]; 4]
-    );
+    assert_eq!(tiles.set_row(2, [5; 4]).as_array(), [[1, 2, 5, 4]; 4]);
 }
