@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use crate::{direction::Direction, tiles_state::TilesState};
 use pancurses::{curs_set, endwin, initscr, noecho, Input, Window};
 mod game_board_internal;
@@ -46,12 +48,28 @@ impl GameBoard {
         self.window.erase();
         self.render_background_grid();
         self.reflect_game_board_state();
-        self.window.refresh();
+        // self.window.refresh();
     }
 
     pub fn move_tiles(&mut self, direction: Direction) {
+        match self
+            .game_board_state
+            .file
+            .write_all(self.game_board_state.game_state.to_string().as_bytes())
+        {
+            Err(why) => panic!("{}", why),
+            Ok(_) => (),
+        }
         if self.game_board_state.move_tiles(direction) {
             self.game_board_state.initialise_tile();
+        }
+        match self
+            .game_board_state
+            .file
+            .write_all(self.game_board_state.game_state.to_string().as_bytes())
+        {
+            Err(why) => panic!("{}", why),
+            Ok(_) => (),
         }
     }
 }

@@ -16,6 +16,13 @@ impl std::ops::IndexMut<usize> for Tiles {
     }
 }
 
+impl std::fmt::Display for Tiles {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.tiles)?;
+        Ok(())
+    }
+}
+
 impl Tiles {
     pub fn new(array: [[i32; 4]; 4]) -> Self {
         Self { tiles: array }

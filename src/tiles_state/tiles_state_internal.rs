@@ -1,18 +1,31 @@
 use super::TilesState;
-use rand::Rng;
+use pancurses::{def_prog_mode, endwin, reset_prog_mode};
+use rand::{seq::SliceRandom, Rng};
 
 trait ArrayExt {}
 
 impl TilesState {
     pub(crate) fn initialise_tile(&mut self) {
-        let y = self.random_coordinate();
-        let x = self.random_coordinate();
-        if self.is_tile_initialised(y, x) {
-            self.initialise_tile();
-            return;
+        let mut vec: Vec<(i32, i32)> = vec![];
+        self.game_state
+            .as_array()
+            .iter()
+            .enumerate()
+            .for_each(|(i, y)| {
+                y.iter().enumerate().for_each(|(j, x)| -> () {
+                    if *x == 0 {
+                        vec.push((i as i32, j as i32));
+                    }
+                })
+            });
+        def_prog_mode();
+        endwin();
+        dbg!(vec.len());
+        reset_prog_mode();
+        if let Some(&(x, y)) = vec.choose(&mut self.randomiser) {
+            let new_value = self.generate_new_tile_value();
+            self.update_certain_tile_internal(y, x, new_value);
         }
-        let new_value = self.generate_new_tile_value();
-        self.update_certain_tile_internal(y, x, new_value);
     }
 
     pub(crate) fn is_tile_initialised(&self, y: i32, x: i32) -> bool {
