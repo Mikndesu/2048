@@ -37,19 +37,19 @@ impl Tiles {
         return arr;
     }
 
-    pub fn set_column(&self, i: i32, column: [i32; 4]) -> Tiles {
+    pub fn set_column(&self, i: i32, column: [i32; 4]) -> Box<Tiles> {
         let mut tiles = self.tiles;
         tiles[i as usize] = column;
-        Self { tiles }
+        Box::new(Self { tiles })
     }
 
-    pub fn set_row(&self, i: i32, row: [i32; 4]) -> Tiles {
+    pub fn set_row(&self, i: i32, row: [i32; 4]) -> Box<Tiles> {
         let mut tiles = self.tiles;
         tiles
             .iter_mut()
             .zip(row.iter())
             .for_each(|(x, y)| x[i as usize] = *y);
-        Self { tiles }
+        Box::new(Self { tiles })
     }
 }
 

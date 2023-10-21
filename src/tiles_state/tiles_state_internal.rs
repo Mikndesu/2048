@@ -8,7 +8,8 @@ impl TilesState {
         let y = self.random_coordinate();
         let x = self.random_coordinate();
         if self.is_tile_initialised(y, x) {
-            self.initialise_tile()
+            self.initialise_tile();
+            return;
         }
         let new_value = self.generate_new_tile_value();
         self.update_certain_tile_internal(y, x, new_value);
@@ -168,6 +169,10 @@ fn test_move_after_merge() {
     assert_eq!(
         TilesState::move_after_merge([4, 8, 0, 2]),
         ([0, 4, 8, 2], true)
+    );
+    assert_eq!(
+        TilesState::move_after_merge([2, 0, 0, 0]),
+        ([0, 0, 0, 2], true)
     );
     assert_eq!(TilesState::move_after_merge([2; 4]), ([2; 4], false));
 }
