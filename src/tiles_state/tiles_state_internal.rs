@@ -1,5 +1,4 @@
 use super::TilesState;
-use pancurses::{def_prog_mode, endwin, reset_prog_mode};
 use rand::{seq::SliceRandom, Rng};
 
 trait ArrayExt {}
@@ -18,11 +17,7 @@ impl TilesState {
                     }
                 })
             });
-        def_prog_mode();
-        endwin();
-        dbg!(vec.len());
-        reset_prog_mode();
-        if let Some(&(x, y)) = vec.choose(&mut self.randomiser) {
+        if let Some(&(y, x)) = vec.choose(&mut self.randomiser) {
             let new_value = self.generate_new_tile_value();
             self.update_certain_tile_internal(y, x, new_value);
         }
