@@ -9,18 +9,18 @@ impl GameBoard {
     pub(crate) fn reflect_game_board_state(&self) {
         let state = &self.game_board_state;
         let margin_y = |i: i32| -> i32 {
-            if i != 1 {
-                (i / 2) + 1
-            } else {
-                1
-            }
+            return if i != 1 { (i / 2) + 1 } else { 1 };
+        };
+        let margin_x = |i: i32, n: i32| -> i32 {
+            let addtional = if n >= 128 { -1 } else { 0 };
+            return addtional + if i != 1 { (i / 2) + 1 } else { 1 };
         };
         for i in 0..self.to_be_rendered {
             for j in 0..self.to_be_rendered {
                 let n = state.get_state()[i as usize][j as usize];
                 self.window.mvaddstr(
                     self.y + margin_y(self.height) + j * (self.height + 1),
-                    self.x + margin_y(self.width) + i * (self.width + 1),
+                    self.x + margin_x(self.width, n) + i * (self.width + 1),
                     if n != 0 {
                         n.to_string()
                     } else {
