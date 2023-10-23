@@ -1,7 +1,10 @@
 use std::io::Write;
 
 use crate::{direction::Direction, tiles_state::TilesState};
-use pancurses::{curs_set, endwin, initscr, noecho, Input, Window};
+use pancurses::{
+    curs_set, endwin, init_pair, initscr, noecho, start_color, Input, Window, COLOR_BLACK,
+    COLOR_CYAN, COLOR_GREEN, COLOR_MAGENTA, COLOR_RED, COLOR_WHITE, COLOR_YELLOW,
+};
 mod game_board_internal;
 pub(crate) mod window_ext;
 
@@ -26,7 +29,9 @@ impl GameBoard {
         let vertical_side_length = (height + 1) * to_be_rendered;
         let horizontal_side_length = (width + 1) * to_be_rendered;
         noecho();
+        start_color();
         curs_set(0);
+        initialise_colour_pairs();
         Self {
             window,
             game_board_state,
@@ -62,4 +67,15 @@ impl Drop for GameBoard {
     fn drop(&mut self) {
         endwin();
     }
+}
+
+fn initialise_colour_pairs() {
+    use crate::colour::Colour;
+    init_pair(Colour::White as i16, COLOR_WHITE, COLOR_BLACK);
+    init_pair(Colour::Green as i16, COLOR_GREEN, COLOR_BLACK);
+    init_pair(Colour::LightGreen as i16, 10, COLOR_BLACK);
+    init_pair(Colour::Magenta as i16, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(Colour::Cyan as i16, COLOR_CYAN, COLOR_BLACK);
+    init_pair(Colour::Red as i16, COLOR_RED, COLOR_BLACK);
+    init_pair(Colour::Yellow as i16, COLOR_YELLOW, COLOR_BLACK);
 }

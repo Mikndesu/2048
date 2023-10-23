@@ -2,7 +2,7 @@ use super::window_ext::WindowExt;
 use super::GameBoard;
 use pancurses::{
     ACS_BTEE, ACS_HLINE, ACS_LLCORNER, ACS_LRCORNER, ACS_LTEE, ACS_PLUS, ACS_RTEE, ACS_TTEE,
-    ACS_ULCORNER, ACS_URCORNER, ACS_VLINE,
+    ACS_ULCORNER, ACS_URCORNER, ACS_VLINE, COLOR_PAIR,
 };
 
 impl GameBoard {
@@ -18,6 +18,8 @@ impl GameBoard {
         for i in 0..self.to_be_rendered {
             for j in 0..self.to_be_rendered {
                 let n = state.get_state()[i as usize][j as usize];
+                let colour = matching_colour(n);
+                self.window.attron(COLOR_PAIR(colour));
                 self.window.mvaddstr(
                     self.y + margin_y(self.height) + j * (self.height + 1),
                     self.x + margin_x(self.width, n) + i * (self.width + 1),
@@ -27,6 +29,7 @@ impl GameBoard {
                         "".to_string()
                     },
                 );
+                self.window.attroff(COLOR_PAIR(colour));
             }
         }
     }
@@ -82,4 +85,17 @@ impl GameBoard {
             ACS_LRCORNER(),
         );
     }
+}
+
+fn matching_colour(i: i32) -> u32 {
+    use crate::colour::Colour;
+    return match i {
+        2 => Colour::White,
+        4 => Colour::Green,
+        8 => Colour::LightGreen,
+        16 => Colour::Magenta,
+        32 => Colour::Cyan,
+        64 => Colour::Red,
+        _ => Colour::Yellow,
+    } as u32;
 }

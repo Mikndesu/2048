@@ -1,5 +1,6 @@
 extern crate pancurses;
 
+mod colour;
 mod direction;
 mod game;
 mod game_board;
