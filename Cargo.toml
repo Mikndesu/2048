@@ -9,3 +9,6 @@ edition = "2021"
 home = "0.5.5"
 pancurses = "0.17"
 rand = "0.8.5"
+
+[dev-dependencies]
+assert_cmd = "2.0.12"
