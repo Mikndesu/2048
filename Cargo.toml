@@ -11,4 +11,4 @@ pancurses = "0.17"
 rand = "0.8.5"
 
 [dev-dependencies]
-assert_cmd = "2.0.12"
+file_diff = "1.0.0"
