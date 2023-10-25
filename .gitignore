@@ -1,3 +1,6 @@
 /target
 build/
 .vscode
+test/wrong.dat
+test/test_write.dat
+.DS_Store
