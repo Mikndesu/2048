@@ -1,6 +1,4 @@
-use std::io::Write;
-
-use crate::{direction::Direction, tiles_state::TilesState};
+use crate::{data::ProgressData, direction::Direction, tiles_state::TilesState};
 use pancurses::{
     curs_set, endwin, init_pair, initscr, noecho, start_color, Input, Window, COLOR_BLACK,
     COLOR_CYAN, COLOR_GREEN, COLOR_MAGENTA, COLOR_RED, COLOR_WHITE, COLOR_YELLOW,
@@ -60,6 +58,27 @@ impl GameBoard {
         if self.game_board_state.move_tiles(direction) {
             self.game_board_state.initialise_tile();
         }
+    }
+
+    pub fn clear_state(&mut self) {
+        self.game_board_state.clear_state();
+    }
+
+    pub fn restore_progress(&mut self) {
+        // if saved progress is not valid, do nothing.
+        let game_data = ProgressData::new();
+        endwin();
+        match game_data.desirialise() {
+            Some(tiles) => {
+                self.game_board_state.game_state = Box::new(tiles);
+            }
+            None => (),
+        };
+    }
+
+    pub fn save_progress(&self) {
+        let game_data = ProgressData::new();
+        game_data.serialise(&self.game_board_state.game_state);
     }
 }
 

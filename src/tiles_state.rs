@@ -1,5 +1,3 @@
-use std::{fs::File, io::Write, path::Path};
-
 use crate::{direction::Direction, tiles::Tiles};
 use rand::rngs::ThreadRng;
 
@@ -8,7 +6,6 @@ mod tiles_state_internal;
 pub struct TilesState {
     pub game_state: Box<Tiles>,
     randomiser: ThreadRng,
-    pub file: File,
 }
 
 impl TilesState {
@@ -16,10 +13,6 @@ impl TilesState {
         let mut instance = Self {
             game_state: Box::new(Tiles::new([[0; 4]; 4])),
             randomiser: rand::thread_rng(),
-            file: match File::create(Path::new("aaa.text")) {
-                Err(why) => panic!("{}", why),
-                Ok(file) => file,
-            },
         };
         for _ in 0..=1 {
             instance.initialise_tile();
@@ -72,6 +65,13 @@ impl TilesState {
             }
         }
         is_move_successful
+    }
+
+    pub fn clear_state(&mut self) {
+        self.game_state.clear_all();
+        for _ in 0..=1 {
+            self.initialise_tile();
+        }
     }
 }
 

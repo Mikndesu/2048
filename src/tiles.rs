@@ -58,6 +58,10 @@ impl Tiles {
             .for_each(|(x, y)| x[i as usize] = *y);
         Box::new(Self { tiles })
     }
+
+    pub fn clear_all(&mut self) {
+        self.tiles = [[0; 4]; 4];
+    }
 }
 
 #[test]

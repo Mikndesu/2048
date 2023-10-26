@@ -19,6 +19,9 @@ impl Game {
             let ch = self.game_baord.get_input();
             match ch.unwrap() {
                 Input::Character('q') => break,
+                Input::Character('r') => self.restore_progress(),
+                Input::Character('s') => self.save_progress(),
+                Input::Character('a') => self.start_new(),
                 Input::KeyUp => self.game_baord.move_tiles(Direction::UP),
                 Input::KeyDown => self.game_baord.move_tiles(Direction::DOWN),
                 Input::KeyRight => self.game_baord.move_tiles(Direction::RIGHT),
@@ -26,5 +29,17 @@ impl Game {
                 _ => (),
             }
         }
+    }
+
+    fn start_new(&mut self) {
+        self.game_baord.clear_state();
+    }
+
+    fn save_progress(&self) {
+        self.game_baord.save_progress();
+    }
+
+    fn restore_progress(&mut self) {
+        self.game_baord.restore_progress();
     }
 }

@@ -12,7 +12,7 @@ impl TilesState {
             .enumerate()
             .for_each(|(i, y)| {
                 y.iter().enumerate().for_each(|(j, x)| -> () {
-                    if *x == 0 {
+                    if !self.is_tile_initialised(i as i32, j as i32) {
                         vec.push((i as i32, j as i32));
                     }
                 })
@@ -38,6 +38,7 @@ impl TilesState {
     pub(crate) fn move_tiles_internal(&self, array: [i32; 4]) -> ([i32; 4], bool) {
         let (arr, flag1) = Self::merge_matching_pair(array);
         let (arr2, flag2) = Self::move_after_merge(arr);
+        // return true when either of methods return true
         (arr2, flag1 | flag2)
     }
 
@@ -54,10 +55,7 @@ impl TilesState {
                     .skip(from + 1)
                     .enumerate()
                     .fold(Some(NOT_FOUND), |opt, (i, x)| -> Option<usize> {
-                        if opt.is_none() || opt.unwrap() != NOT_FOUND {
-                            return opt;
-                        }
-                        if *x == 0 {
+                        if (opt.is_none() || opt.unwrap() != NOT_FOUND) || *x == 0 {
                             return opt;
                         } else {
                             return if *x == from_value {
@@ -107,10 +105,6 @@ impl TilesState {
 
     fn update_certain_tile_internal(&mut self, y: i32, x: i32, value: i32) {
         self.game_state[y as usize][x as usize] = value;
-    }
-
-    fn random_coordinate(&mut self) -> i32 {
-        self.randomiser.gen_range(0..3)
     }
 }
 
