@@ -9,6 +9,7 @@ pub(crate) mod window_ext;
 pub struct GameBoard {
     window: Window,
     game_board_state: TilesState,
+    score: i32,
     y: i32,
     x: i32,
     height: i32,
@@ -33,6 +34,7 @@ impl GameBoard {
         Self {
             window,
             game_board_state,
+            score: 0,
             y,
             x,
             height,
@@ -55,13 +57,16 @@ impl GameBoard {
     }
 
     pub fn move_tiles(&mut self, direction: Direction) {
-        if self.game_board_state.move_tiles(direction) {
+        let (is_move_successful, score_increase) = self.game_board_state.move_tiles(direction);
+        if is_move_successful {
             self.game_board_state.initialise_tile();
         }
+        self.score += score_increase;
     }
 
-    pub fn clear_state(&mut self) {
-        self.game_board_state.clear_state();
+    pub fn clear(&mut self) {
+        self.game_board_state.clear();
+        self.score = 0;
     }
 
     pub fn restore_progress(&mut self) {

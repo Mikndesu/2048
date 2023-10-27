@@ -32,7 +32,7 @@ impl Game {
     }
 
     fn start_new(&mut self) {
-        self.game_baord.clear_state();
+        self.game_baord.clear();
     }
 
     fn save_progress(&self) {
