@@ -25,15 +25,15 @@ impl ProgressData {
         }
     }
 
-    pub fn serialise(&self, tiles: &Tiles) {
-        self.write(&self.progress_file, tiles);
+    pub fn serialise(&self, tiles: &Tiles, score: i32) {
+        self.write(&self.progress_file, tiles, score);
     }
 
-    pub fn desirialise(&self) -> Option<Tiles> {
+    pub fn desirialise(&self) -> Option<(Tiles, i32)> {
         self.read(&self.progress_file)
     }
 
-    fn write(&self, path: &PathBuf, tiles: &Tiles) {
+    fn write(&self, path: &PathBuf, tiles: &Tiles, score: i32) {
         let file = match File::create(path) {
             Err(why) => panic!("{why}"),
             Ok(file) => file,
@@ -47,9 +47,13 @@ impl ProgressData {
                 }
             })
         });
+        match buf_writer.write(score.to_ne_bytes().as_slice()) {
+            Ok(_) => (),
+            Err(why) => panic!("{}", why),
+        }
     }
 
-    fn read(&self, path: &PathBuf) -> Option<Tiles> {
+    fn read(&self, path: &PathBuf) -> Option<(Tiles, i32)> {
         let file = match File::open(path) {
             Err(_) => return None,
             Ok(file) => file,
@@ -66,8 +70,14 @@ impl ProgressData {
                 );
             })
         });
+        let mut buffer = mem::MaybeUninit::<[u8; 4]>::uninit();
+        let buffer = unsafe { &mut *buffer.as_mut_ptr() };
+        buf_reader.read_exact(buffer).unwrap();
+        let score = i32::from_ne_bytes(
+            <[u8; 4]>::try_from(*buffer).expect("Oops, something went wrong..."),
+        );
         return if array != [[0; 4]; 4] {
-            Some(Tiles::new(array))
+            Some((Tiles::new(array), score))
         } else {
             None
         };
@@ -81,7 +91,8 @@ fn test_read() {
     let tile = Tiles::new([[1, 2, 3, 4]; 4]);
     let current_dir = env::current_dir().unwrap();
     let tile1 = data.read(&current_dir.join("test/test_read.dat"));
-    assert_eq!(tile1.unwrap().as_array(), tile.as_array());
+    assert_eq!(tile1.as_ref().unwrap().0.as_array(), tile.as_array());
+    assert_eq!(tile1.as_ref().unwrap().1, 4097);
 }
 
 #[test]
@@ -91,8 +102,8 @@ fn test_write() {
     let data = ProgressData::new();
     let tile = Tiles::new([[1, 2, 3, 4]; 4]);
     let tile1 = Tiles::new([[5; 4]; 4]);
-    data.write(&current_dir.join("test/test_write.dat"), &tile);
-    data.write(&current_dir.join("test/wrong.dat"), &tile1);
+    data.write(&current_dir.join("test/test_write.dat"), &tile, 4097);
+    data.write(&current_dir.join("test/wrong.dat"), &tile1, 1000);
     let mut expected = match File::open(current_dir.join("test/test_write_expected.dat")) {
         Ok(f) => f,
         Err(why) => panic!("{}", why),

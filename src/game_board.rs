@@ -74,8 +74,9 @@ impl GameBoard {
         let game_data = ProgressData::new();
         endwin();
         match game_data.desirialise() {
-            Some(tiles) => {
+            Some((tiles, score)) => {
                 self.game_board_state.game_state = Box::new(tiles);
+                self.score = score;
             }
             None => (),
         };
@@ -83,7 +84,7 @@ impl GameBoard {
 
     pub fn save_progress(&self) {
         let game_data = ProgressData::new();
-        game_data.serialise(&self.game_board_state.game_state);
+        game_data.serialise(&self.game_board_state.game_state, self.score);
     }
 }
 
