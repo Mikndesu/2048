@@ -58,24 +58,21 @@ impl ProgressData {
             Err(_) => return None,
             Ok(file) => file,
         };
-        let mut array = [[0; 4]; 4];
         let mut buf_reader = BufReader::new(file);
+        #[inline]
+        fn read_int_from_bin(buf_reader: &mut BufReader<File>) -> i32 {
+            let mut buffer = mem::MaybeUninit::<[u8; 4]>::uninit();
+            let buffer = unsafe { &mut *buffer.as_mut_ptr() };
+            buf_reader.read_exact(buffer).unwrap();
+            i32::from_ne_bytes(<[u8; 4]>::try_from(*buffer).expect("Oops, something went wrong..."))
+        }
+        let mut array = [[0; 4]; 4];
         array.iter_mut().for_each(|y| -> () {
             y.iter_mut().for_each(|x| -> () {
-                let mut buffer = mem::MaybeUninit::<[u8; 4]>::uninit();
-                let buffer = unsafe { &mut *buffer.as_mut_ptr() };
-                buf_reader.read_exact(buffer).unwrap();
-                *x = i32::from_ne_bytes(
-                    <[u8; 4]>::try_from(*buffer).expect("Oops, something went wrong..."),
-                );
+                *x = read_int_from_bin(&mut buf_reader);
             })
         });
-        let mut buffer = mem::MaybeUninit::<[u8; 4]>::uninit();
-        let buffer = unsafe { &mut *buffer.as_mut_ptr() };
-        buf_reader.read_exact(buffer).unwrap();
-        let score = i32::from_ne_bytes(
-            <[u8; 4]>::try_from(*buffer).expect("Oops, something went wrong..."),
-        );
+        let score = read_int_from_bin(&mut buf_reader);
         return if array != [[0; 4]; 4] {
             Some((Tiles::new(array), score))
         } else {
