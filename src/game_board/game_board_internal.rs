@@ -101,6 +101,16 @@ impl GameBoard {
                 .mvaddstr(origin_y_pos + i as i32, origin_x_pos, str);
         })
     }
+
+    pub(crate) fn render_score(&self) {
+        let origin_y_pos = 1;
+        let origin_x_pos = self.horizontal_side_length + 4;
+        self.window.mvaddstr(
+            origin_y_pos,
+            origin_x_pos,
+            format!("Current Score: {}", self.score),
+        );
+    }
 }
 
 fn matching_colour(i: i32) -> u32 {
