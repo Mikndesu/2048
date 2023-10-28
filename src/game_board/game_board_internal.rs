@@ -85,6 +85,22 @@ impl GameBoard {
             ACS_LRCORNER(),
         );
     }
+
+    pub(crate) fn render_description(&self) {
+        let origin_y_pos = 3;
+        let origin_x_pos = self.horizontal_side_length + 4;
+        const ARROW: &str = "Use arrow keys to move tiles.";
+        const SAVE: &str = "Press 's' to save the current progress.";
+        const RESTORE: &str = "Press 'r' to restore your previous progress.";
+        const NEW_GAME: &str = "Press 'a' to start a new game.";
+        const QUIT: &str = "Press 'q' to quit.";
+        let desc = vec![ARROW, SAVE, RESTORE, NEW_GAME, QUIT];
+        desc.iter().enumerate().for_each(|(i, x)| {
+            let str = x.to_string();
+            self.window
+                .mvaddstr(origin_y_pos + i as i32, origin_x_pos, str);
+        })
+    }
 }
 
 fn matching_colour(i: i32) -> u32 {

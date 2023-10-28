@@ -53,6 +53,7 @@ impl GameBoard {
         self.window.erase();
         self.render_background_grid();
         self.reflect_game_board_state();
+        self.render_description();
         self.window.refresh();
     }
 
