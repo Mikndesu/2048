@@ -35,6 +35,8 @@ pub struct ScoreData {
     score_file: File,
 }
 
+impl ScoreData {}
+
 impl ProgressData {
     pub fn new() -> Self {
         let home_dir = match home::home_dir() {

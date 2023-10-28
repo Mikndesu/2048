@@ -40,7 +40,7 @@ impl GameBoard {
             for j in 0..self.to_be_rendered {
                 let n = state.get_state()[i as usize][j as usize];
                 let colour = matching_colour(n);
-                self.window.attron(COLOR_PAIR(colour));
+                self.window.attron(COLOR_PAIR(colour.into()));
                 self.window.mvaddstr(
                     self.y + margin_y(self.height) + j * (self.height + 1),
                     self.x + margin_x(self.width, n) + i * (self.width + 1),
@@ -50,7 +50,7 @@ impl GameBoard {
                         "".to_string()
                     },
                 );
-                self.window.attroff(COLOR_PAIR(colour));
+                self.window.attroff(COLOR_PAIR(colour.into()));
             }
         }
     }
