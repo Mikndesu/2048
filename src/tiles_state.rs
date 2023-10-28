@@ -25,32 +25,26 @@ impl TilesState {
     }
 
     pub fn move_tiles(&mut self, direction: Direction) -> (bool, i32) {
+        use paste::paste;
         let mut is_move_successful = false;
         let mut score_increase = 0;
         for i in 0..4 {
             let flag: bool;
             let j: i32;
+            macro_rules! moving {
+                (vec_type => $vec_type:ident, is_reverse_move => $is_reverse_move:expr) => {{
+                    paste! {
+                        let mut arr = self.game_state.[<get_ $vec_type>](i);
+                        (arr, flag, j) = self.move_tiles_internal(arr, $is_reverse_move);
+                        self.game_state = self.game_state.[<set_ $vec_type>](i, arr);
+                    }
+                }};
+            }
             match direction {
-                Direction::UP => {
-                    let mut column = self.game_state.get_column(i);
-                    (column, flag, j) = self.move_tiles_internal(column, true);
-                    self.game_state = self.game_state.set_column(i, column);
-                }
-                Direction::DOWN => {
-                    let mut column = self.game_state.get_column(i);
-                    (column, flag, j) = self.move_tiles_internal(column, false);
-                    self.game_state = self.game_state.set_column(i, column);
-                }
-                Direction::RIGHT => {
-                    let mut row = self.game_state.get_row(i);
-                    (row, flag, j) = self.move_tiles_internal(row, false);
-                    self.game_state = self.game_state.set_row(i, row);
-                }
-                Direction::LEFT => {
-                    let mut row = self.game_state.get_row(i);
-                    (row, flag, j) = self.move_tiles_internal(row, true);
-                    self.game_state = self.game_state.set_row(i, row);
-                }
+                Direction::Up => moving!(vec_type=>column,is_reverse_move=>true),
+                Direction::Down => moving!(vec_type=>column,is_reverse_move=>false),
+                Direction::Right => moving!(vec_type=>row,is_reverse_move=>false),
+                Direction::Left => moving!(vec_type=>row,is_reverse_move=>true),
             }
             is_move_successful = is_move_successful || flag;
             score_increase += j;
@@ -75,7 +69,7 @@ fn test_move_tiles() {
     tiles_state.game_state[1][2] = 4;
     tiles_state.game_state[0][3] = 8;
     println!("{:?}", tiles_state.game_state);
-    let (flag, i) = tiles_state.move_tiles(Direction::RIGHT);
+    let (flag, i) = tiles_state.move_tiles(Direction::Right);
     assert_eq!(
         tiles_state.game_state.as_array(),
         [[0; 4], [0; 4], [0; 4], [0, 4, 4, 8]]

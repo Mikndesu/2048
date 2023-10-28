@@ -30,6 +30,7 @@ dependencies = [
  "file_diff",
  "home",
  "pancurses",
+ "paste",
  "rand",
 ]
 
@@ -88,6 +89,12 @@ dependencies = [
  "pdcurses-sys",
  "winreg",
 ]
+
+[[package]]
+name = "paste"
+version = "1.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 
 [[package]]
 name = "pdcurses-sys"

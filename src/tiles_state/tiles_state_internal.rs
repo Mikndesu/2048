@@ -17,7 +17,7 @@ impl TilesState {
             .iter()
             .enumerate()
             .for_each(|(i, y)| {
-                y.iter().enumerate().for_each(|(j, x)| -> () {
+                y.iter().enumerate().for_each(|(j, _)| {
                     if !self.is_tile_initialised(i as i32, j as i32) {
                         vec.push((i as i32, j as i32));
                     }
@@ -62,20 +62,18 @@ impl TilesState {
         while from < 4 {
             let from_value = arr[from];
             if from_value != 0 {
-                const NOT_FOUND: usize = 10;
+                const NOT_FOUND: usize = usize::MAX;
                 let option = arr
                     .iter()
                     .skip(from + 1)
                     .enumerate()
-                    .fold(Some(NOT_FOUND), |opt, (i, x)| -> Option<usize> {
-                        if (opt.is_none() || opt.unwrap() != NOT_FOUND) || *x == 0 {
-                            return opt;
+                    .try_fold(NOT_FOUND, |opt, (i, x)| -> Option<usize> {
+                        if (opt != NOT_FOUND) || *x == 0 {
+                            Some(opt)
+                        } else if *x == from_value {
+                            Some(from + i + 1)
                         } else {
-                            return if *x == from_value {
-                                Some(from + i + 1)
-                            } else {
-                                None
-                            };
+                            None
                         }
                     })
                     .and_then(|x| -> Option<usize> {
@@ -92,7 +90,7 @@ impl TilesState {
             from += 1;
         }
         arr.reverse();
-        return (arr, is_move_successful, score_increase);
+        (arr, is_move_successful, score_increase)
     }
 
     fn move_after_merge(mut arr: [i32; 4]) -> ([i32; 4], bool) {
@@ -114,7 +112,7 @@ impl TilesState {
             }
         }
         arr.reverse();
-        return (arr, is_move_successful);
+        (arr, is_move_successful)
     }
 
     fn update_certain_tile_internal(&mut self, y: i32, x: i32, value: i32) {

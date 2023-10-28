@@ -39,13 +39,12 @@ impl ProgressData {
             Ok(file) => file,
         };
         let mut buf_writer = BufWriter::new(file);
-        tiles.as_array().iter().for_each(|y| -> () {
-            y.iter().for_each(|&x| -> () {
-                match buf_writer.write(x.clone().to_ne_bytes().as_slice()) {
+        tiles.as_array().iter().for_each(|y| {
+            y.iter()
+                .for_each(|&x| match buf_writer.write(x.to_ne_bytes().as_slice()) {
                     Ok(_) => (),
                     Err(why) => panic!("{}", why),
-                }
-            })
+                })
         });
         match buf_writer.write(score.to_ne_bytes().as_slice()) {
             Ok(_) => (),
@@ -64,20 +63,20 @@ impl ProgressData {
             let mut buffer = mem::MaybeUninit::<[u8; 4]>::uninit();
             let buffer = unsafe { &mut *buffer.as_mut_ptr() };
             buf_reader.read_exact(buffer).unwrap();
-            i32::from_ne_bytes(<[u8; 4]>::try_from(*buffer).expect("Oops, something went wrong..."))
+            i32::from_ne_bytes(*buffer)
         }
         let mut array = [[0; 4]; 4];
-        array.iter_mut().for_each(|y| -> () {
-            y.iter_mut().for_each(|x| -> () {
+        array.iter_mut().for_each(|y| {
+            y.iter_mut().for_each(|x| {
                 *x = read_int_from_bin(&mut buf_reader);
             })
         });
         let score = read_int_from_bin(&mut buf_reader);
-        return if array != [[0; 4]; 4] {
+        if array != [[0; 4]; 4] {
             Some((Tiles::new(array), score))
         } else {
             None
-        };
+        }
     }
 }
 

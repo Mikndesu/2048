@@ -29,7 +29,7 @@ impl Tiles {
     }
 
     pub fn as_array(&self) -> [[i32; 4]; 4] {
-        return self.tiles;
+        self.tiles
     }
 
     pub fn get_column(&self, i: i32) -> [i32; 4] {
@@ -41,7 +41,7 @@ impl Tiles {
         arr.iter_mut()
             .zip(self.tiles.iter())
             .for_each(|(x, y)| *x = y[i as usize]);
-        return arr;
+        arr
     }
 
     pub fn set_column(&self, i: i32, column: [i32; 4]) -> Box<Tiles> {

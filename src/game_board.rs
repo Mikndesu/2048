@@ -72,14 +72,10 @@ impl GameBoard {
     pub fn restore_progress(&mut self) {
         // if saved progress is not valid, do nothing.
         let game_data = ProgressData::new();
-        endwin();
-        match game_data.desirialise() {
-            Some((tiles, score)) => {
-                self.game_board_state.game_state = Box::new(tiles);
-                self.score = score;
-            }
-            None => (),
-        };
+        if let Some((tiles, score)) = game_data.desirialise() {
+            self.game_board_state.game_state = Box::new(tiles);
+            self.score = score;
+        }
     }
 
     pub fn save_progress(&self) {

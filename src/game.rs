@@ -22,10 +22,10 @@ impl Game {
                 Input::Character('r') => self.restore_progress(),
                 Input::Character('s') => self.save_progress(),
                 Input::Character('a') => self.start_new(),
-                Input::KeyUp => self.game_baord.move_tiles(Direction::UP),
-                Input::KeyDown => self.game_baord.move_tiles(Direction::DOWN),
-                Input::KeyRight => self.game_baord.move_tiles(Direction::RIGHT),
-                Input::KeyLeft => self.game_baord.move_tiles(Direction::LEFT),
+                Input::KeyUp => self.game_baord.move_tiles(Direction::Up),
+                Input::KeyDown => self.game_baord.move_tiles(Direction::Down),
+                Input::KeyRight => self.game_baord.move_tiles(Direction::Right),
+                Input::KeyLeft => self.game_baord.move_tiles(Direction::Left),
                 _ => (),
             }
         }

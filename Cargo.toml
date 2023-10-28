@@ -9,6 +9,7 @@ edition = "2021"
 home = "0.5.5"
 pancurses = "0.17"
 rand = "0.8.5"
+paste = "1.0.14"
 
 [dev-dependencies]
 file_diff = "1.0.0"
