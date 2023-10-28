@@ -27,47 +27,33 @@ impl TilesState {
     pub fn move_tiles(&mut self, direction: Direction) -> (bool, i32) {
         let mut is_move_successful = false;
         let mut score_increase = 0;
-        match direction {
-            Direction::UP => {
-                for i in 0..4 {
-                    let mut slice = self.game_state.get_column(i);
-                    slice.reverse();
-                    let (mut slice, flag, j) = self.move_tiles_internal(slice);
-                    slice.reverse();
-                    self.game_state = self.game_state.set_column(i, slice);
-                    is_move_successful = is_move_successful || flag;
-                    score_increase += j;
+        for i in 0..4 {
+            let flag: bool;
+            let j: i32;
+            match direction {
+                Direction::UP => {
+                    let mut column = self.game_state.get_column(i);
+                    (column, flag, j) = self.move_tiles_internal(column, true);
+                    self.game_state = self.game_state.set_column(i, column);
+                }
+                Direction::DOWN => {
+                    let mut column = self.game_state.get_column(i);
+                    (column, flag, j) = self.move_tiles_internal(column, false);
+                    self.game_state = self.game_state.set_column(i, column);
+                }
+                Direction::RIGHT => {
+                    let mut row = self.game_state.get_row(i);
+                    (row, flag, j) = self.move_tiles_internal(row, false);
+                    self.game_state = self.game_state.set_row(i, row);
+                }
+                Direction::LEFT => {
+                    let mut row = self.game_state.get_row(i);
+                    (row, flag, j) = self.move_tiles_internal(row, true);
+                    self.game_state = self.game_state.set_row(i, row);
                 }
             }
-            Direction::DOWN => {
-                for i in 0..4 {
-                    let slice = self.game_state.get_column(i);
-                    let (slice, flag, j) = self.move_tiles_internal(slice);
-                    self.game_state = self.game_state.set_column(i, slice);
-                    is_move_successful = is_move_successful || flag;
-                    score_increase += j;
-                }
-            }
-            Direction::RIGHT => {
-                for i in 0..4 {
-                    let slice = self.game_state.get_row(i);
-                    let (slice, flag, j) = self.move_tiles_internal(slice);
-                    self.game_state = self.game_state.set_row(i, slice);
-                    is_move_successful = is_move_successful || flag;
-                    score_increase += j;
-                }
-            }
-            Direction::LEFT => {
-                for i in 0..4 {
-                    let mut slice = self.game_state.get_row(i);
-                    slice.reverse();
-                    let (mut slice, flag, j) = self.move_tiles_internal(slice);
-                    slice.reverse();
-                    self.game_state = self.game_state.set_row(i, slice);
-                    is_move_successful = is_move_successful || flag;
-                    score_increase += j;
-                }
-            }
+            is_move_successful = is_move_successful || flag;
+            score_increase += j;
         }
         (is_move_successful, score_increase)
     }
@@ -89,9 +75,11 @@ fn test_move_tiles() {
     tiles_state.game_state[1][2] = 4;
     tiles_state.game_state[0][3] = 8;
     println!("{:?}", tiles_state.game_state);
-    tiles_state.move_tiles(Direction::RIGHT);
+    let (flag, i) = tiles_state.move_tiles(Direction::RIGHT);
     assert_eq!(
         tiles_state.game_state.as_array(),
         [[0; 4], [0; 4], [0; 4], [0, 4, 4, 8]]
     );
+    assert_eq!(flag, true);
+    assert_eq!(i, 4);
 }

@@ -1,7 +1,13 @@
 use super::TilesState;
 use rand::{seq::SliceRandom, Rng};
 
-trait ArrayExt {}
+macro_rules! reverse_if {
+    ($array:expr, $flag:expr) => {
+        if $flag {
+            $array.reverse();
+        }
+    };
+}
 
 impl TilesState {
     pub(crate) fn initialise_tile(&mut self) {
@@ -35,9 +41,15 @@ impl TilesState {
         }
     }
 
-    pub(crate) fn move_tiles_internal(&self, array: [i32; 4]) -> ([i32; 4], bool, i32) {
+    pub(crate) fn move_tiles_internal(
+        &self,
+        mut array: [i32; 4],
+        is_reverse_move: bool,
+    ) -> ([i32; 4], bool, i32) {
+        reverse_if!(array, is_reverse_move);
         let (arr, flag1, score_increase) = Self::merge_matching_pair(array);
-        let (arr2, flag2) = Self::move_after_merge(arr);
+        let (mut arr2, flag2) = Self::move_after_merge(arr);
+        reverse_if!(arr2, is_reverse_move);
         // return true when either of methods return true
         (arr2, flag1 | flag2, score_increase)
     }
@@ -88,8 +100,8 @@ impl TilesState {
         arr.reverse();
         for i in 0..4 {
             if arr[i] == 0 {
-                // create new array that skips first 'i' value
-                // i.e. when 'i' = 1 then [2,0,0,4] => [0,0,4]
+                // iterate new array that skips first 'i' + 1 value
+                // i.e. when 'i' = 0 then [2,0,0,4] => [0,0,4]
                 // thus the index of the new array is equivalent
                 // to what is added 'i+1' to the old one since
                 // the index counts start at 0.
@@ -115,15 +127,19 @@ fn test_move_tiles_internal() {
     use crate::tiles_state::TilesState;
     let game_board_state = TilesState::new();
     assert_eq!(
-        game_board_state.move_tiles_internal([2, 2, 8, 4]),
+        game_board_state.move_tiles_internal([2, 2, 8, 4], false),
         ([0, 4, 8, 4], true, 4)
     );
     assert_eq!(
-        game_board_state.move_tiles_internal([2, 2, 2, 2]),
+        game_board_state.move_tiles_internal([2, 2, 8, 4], true),
+        ([4, 8, 4, 0], true, 4)
+    );
+    assert_eq!(
+        game_board_state.move_tiles_internal([2, 2, 2, 2], false),
         ([0, 0, 4, 4], true, 8)
     );
     assert_eq!(
-        game_board_state.move_tiles_internal([16, 16, 16, 16]),
+        game_board_state.move_tiles_internal([16, 16, 16, 16], false),
         ([0, 0, 32, 32], true, 64)
     );
 }
