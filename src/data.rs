@@ -43,8 +43,12 @@ impl ProgressData {
             Some(path) => path,
             None => panic!("Impossible to get Home Directory!"),
         };
+        let parent_dir = home_dir.join(".config").join("2048");
+        if let Err(why) = std::fs::create_dir_all(&parent_dir) {
+            panic!("{why}");
+        }
         Self {
-            progress_file: home_dir.join(".config/2048/progress.dat"),
+            progress_file: parent_dir.join("progress.dat"),
         }
     }
 
@@ -58,7 +62,7 @@ impl ProgressData {
 
     fn write(&self, path: &PathBuf, tiles: &Tiles, score: i32) {
         let file = match File::create(path) {
-            Err(why) => panic!("{why}"),
+            Err(why) => panic!("{} {why}", path.display()),
             Ok(file) => file,
         };
         let mut buf_writer = BufWriter::new(file);
