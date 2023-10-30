@@ -1,0 +1,113 @@
+on:
+  push:
+    tags:
+      - "release-v*"
+
+name: Create Release
+
+jobs:
+  build-ubuntu:
+    name: Create release binary for Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: zipping
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: zip game2048_ubuntu.zip target/release/game2048
+
+      - name: save dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: game2048_ubuntu.zip
+          path: ${{github.workspace}}/game2048_ubuntu.zip
+
+  build-windows:
+    name: Create release binary for Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: zipping
+        working-directory: ${{github.workspace}}
+        shell: powershell
+        run: powershell -Command "Compress-Archive -Path target\release\game2048.exe -DestinationPath game2048_windows.zip"
+
+      - name: save dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: game2048_windows.zip
+          path: ${{github.workspace}}\game2048_windows.zip
+
+  build-macos:
+    name: Create release binary for macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: zipping
+        working-directory: ${{github.workspace}}
+        shell: bash
+        run: zip game2048_mac.zip target/release/game2048
+
+      - name: save dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: game2048_mac.zip
+          path: ${{github.workspace}}/game2048_mac.zip
+
+  publish-relase:
+    name: Create All Release
+    needs: [build-ubuntu, build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the artifact (Ubuntu)
+        uses: actions/download-artifact@v3
+        with:
+          name: game2048_ubuntu.zip
+
+      - name: Download the artifact (macOS)
+        uses: actions/download-artifact@v3
+        with:
+          name: game2048_mac.zip
+
+      - name: Download the artifact (Windows)
+        uses: actions/download-artifact@v3
+        with:
+          name: game2048_windows.zip
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            game2048_ubuntu.zip
+            game2048_mac.zip
+            game2048_windows.zip
