@@ -22,13 +22,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 use crate::game_board::GameBoard;
 
 pub struct Game {
-    game_baord: GameBoard,
+    game_board: GameBoard,
 }
 
 impl Game {
     pub fn new() -> Self {
         Self {
-            game_baord: GameBoard::new(0, 0, 3, 7),
+            game_board: GameBoard::new(0, 0, 3, 7),
         }
     }
 
@@ -36,32 +36,32 @@ impl Game {
         use crate::direction::Direction;
         use pancurses::Input;
         loop {
-            self.game_baord.check_if_game_is_over();
-            self.game_baord.render();
-            let ch = self.game_baord.get_input();
+            self.game_board.check_if_game_is_over();
+            self.game_board.render();
+            let ch = self.game_board.get_input();
             match ch.unwrap() {
                 Input::Character('q') => break,
                 Input::Character('r') => self.restore_progress(),
                 Input::Character('s') => self.save_progress(),
                 Input::Character('a') => self.start_new(),
-                Input::KeyUp => self.game_baord.move_tiles(Direction::Up),
-                Input::KeyDown => self.game_baord.move_tiles(Direction::Down),
-                Input::KeyRight => self.game_baord.move_tiles(Direction::Right),
-                Input::KeyLeft => self.game_baord.move_tiles(Direction::Left),
+                Input::KeyUp => self.game_board.move_tiles(Direction::Up),
+                Input::KeyDown => self.game_board.move_tiles(Direction::Down),
+                Input::KeyRight => self.game_board.move_tiles(Direction::Right),
+                Input::KeyLeft => self.game_board.move_tiles(Direction::Left),
                 _ => (),
             }
         }
     }
 
     fn start_new(&mut self) {
-        self.game_baord.clear();
+        self.game_board.clear();
     }
 
     fn save_progress(&self) {
-        self.game_baord.save_progress();
+        self.game_board.save_progress();
     }
 
     fn restore_progress(&mut self) {
-        self.game_baord.restore_progress();
+        self.game_board.restore_progress();
     }
 }
