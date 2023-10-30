@@ -36,6 +36,7 @@ impl Game {
         use crate::direction::Direction;
         use pancurses::Input;
         loop {
+            self.game_baord.check_if_game_is_over();
             self.game_baord.render();
             let ch = self.game_baord.get_input();
             match ch.unwrap() {

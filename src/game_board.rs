@@ -31,6 +31,7 @@ pub struct GameBoard {
     window: Window,
     game_board_state: TilesState,
     score: i32,
+    is_game_over: bool,
     y: i32,
     x: i32,
     height: i32,
@@ -56,6 +57,7 @@ impl GameBoard {
             window,
             game_board_state,
             score: 0,
+            is_game_over: false,
             y,
             x,
             height,
@@ -70,7 +72,18 @@ impl GameBoard {
         self.window.getch()
     }
 
+    pub fn check_if_game_is_over(&mut self) {
+        self.is_game_over =
+            !self.game_board_state.has_empty_tile() && !self.game_board_state.is_movable();
+    }
+
     pub fn render(&self) {
+        if self.is_game_over {
+            self.reflect_game_board_state();
+            self.game_over();
+            self.window.refresh();
+            return;
+        }
         self.window.erase();
         self.render_background_grid();
         self.reflect_game_board_state();
@@ -90,6 +103,7 @@ impl GameBoard {
     pub fn clear(&mut self) {
         self.game_board_state.clear();
         self.score = 0;
+        self.is_game_over = false;
     }
 
     pub fn restore_progress(&mut self) {
@@ -98,10 +112,14 @@ impl GameBoard {
         if let Some((tiles, score)) = game_data.desirialise() {
             self.game_board_state.game_state = Box::new(tiles);
             self.score = score;
+            self.is_game_over = false;
         }
     }
 
     pub fn save_progress(&self) {
+        if self.is_game_over {
+            return;
+        }
         let game_data = ProgressData::new();
         game_data.serialise(&self.game_board_state.game_state, self.score);
     }

@@ -45,6 +45,35 @@ impl TilesState {
         &self.game_state
     }
 
+    pub fn has_empty_tile(&self) -> bool {
+        self.game_state
+            .as_array()
+            .iter()
+            .any(|y| y.iter().any(|x| *x == 0))
+    }
+
+    // this function should not be called except when there are not any empty tiles.
+    pub fn is_movable(&self) -> bool {
+        let mut flag: bool = false;
+        #[inline]
+        fn same_pair_exists(arr: [i32; 4]) -> bool {
+            let mut flag: bool = false;
+            let mut it = arr.iter().peekable();
+            while let Some(x) = it.next() {
+                if let Some(next) = it.peek() {
+                    flag = flag || *x == **next;
+                };
+            }
+            flag
+        }
+        for i in 0..4 {
+            let column = self.game_state.get_column(i);
+            let row = self.game_state.get_row(i);
+            flag = flag || same_pair_exists(column) || same_pair_exists(row);
+        }
+        flag
+    }
+
     pub fn move_tiles(&mut self, direction: Direction) -> (bool, i32) {
         use paste::paste;
         let mut is_move_successful = false;
@@ -79,6 +108,29 @@ impl TilesState {
             self.initialise_tile();
         }
     }
+}
+
+#[test]
+fn test_has_empty_tiles() {
+    let mut tiles_state = TilesState::new();
+    tiles_state.game_state = Box::new(Tiles::new([[2; 4]; 4]));
+    assert_eq!(tiles_state.has_empty_tile(), false);
+    tiles_state.game_state[2][1] = 0;
+    assert_eq!(tiles_state.has_empty_tile(), true);
+}
+
+#[test]
+fn test_is_movable() {
+    let mut tiles_state = TilesState::new();
+    tiles_state.game_state = Box::new(Tiles::new([[2; 4]; 4]));
+    assert_eq!(tiles_state.is_movable(), true);
+    tiles_state.game_state = Box::new(Tiles::new([
+        [1, 2, 3, 4],
+        [4, 3, 2, 1],
+        [1, 2, 3, 4],
+        [4, 3, 2, 1],
+    ]));
+    assert_eq!(tiles_state.is_movable(), false);
 }
 
 #[test]

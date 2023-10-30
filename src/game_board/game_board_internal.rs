@@ -55,6 +55,23 @@ impl GameBoard {
         }
     }
 
+    pub(crate) fn game_over(&self) {
+        use crate::colour::Colour;
+        const A: &str = r#"8""""8                       8"""88                    "#;
+        const B: &str = r#"8    " eeeee eeeeeee eeee    8    8 ee   e eeee eeeee  "#;
+        const C: &str = r#"8e     8   8 8  8  8 8       8    8 88   8 8    8   8  "#;
+        const D: &str = r#"88  ee 8eee8 8e 8  8 8eee    8    8 88  e8 8eee 8eee8e "#;
+        const E: &str = r#"88   8 88  8 88 8  8 88      8    8  8  8  88   88   8 "#;
+        const F: &str = r#"88eee8 88  8 88 8  8 88ee    8eeee8  8ee8  88ee 88   8 "#;
+        let desc = vec![A, B, C, D, E, F];
+        self.window.attron(COLOR_PAIR((Colour::Red as u32).into()));
+        desc.iter().enumerate().for_each(|(i, msg)| {
+            let str = msg.to_string();
+            self.window.mvaddstr(self.y + 5 + i as i32, self.x, str);
+        });
+        self.window.attroff(COLOR_PAIR((Colour::Red as u32).into()));
+    }
+
     pub(crate) fn render_background_grid(&self) {
         for i in 0..=self.to_be_rendered {
             self.window.mvvline(
