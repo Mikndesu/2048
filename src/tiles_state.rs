@@ -32,7 +32,7 @@ pub struct TilesState {
 impl TilesState {
     pub fn new() -> Self {
         let mut instance = Self {
-            game_state: Box::new(Tiles::new([[0; 4]; 4])),
+            game_state: Box::new([[0; 4]; 4].into()),
             randomiser: rand::thread_rng(),
         };
         for _ in 0..=1 {
@@ -46,8 +46,8 @@ impl TilesState {
     }
 
     pub fn has_empty_tile(&self) -> bool {
-        self.game_state
-            .as_array()
+        (*self.game_state)
+            .as_ref()
             .iter()
             .any(|y| y.iter().any(|x| *x == 0))
     }
@@ -113,7 +113,7 @@ impl TilesState {
 #[test]
 fn test_has_empty_tiles() {
     let mut tiles_state = TilesState::new();
-    tiles_state.game_state = Box::new(Tiles::new([[2; 4]; 4]));
+    tiles_state.game_state = Box::new([[2; 4]; 4].into());
     assert_eq!(tiles_state.has_empty_tile(), false);
     tiles_state.game_state[2][1] = 0;
     assert_eq!(tiles_state.has_empty_tile(), true);
@@ -122,9 +122,9 @@ fn test_has_empty_tiles() {
 #[test]
 fn test_is_movable() {
     let mut tiles_state = TilesState::new();
-    tiles_state.game_state = Box::new(Tiles::new([[2; 4]; 4]));
+    tiles_state.game_state = Box::new([[2; 4]; 4].into());
     assert_eq!(tiles_state.is_movable(), true);
-    tiles_state.game_state = Box::new(Tiles::new([
+    tiles_state.game_state = Box::new(Tiles::from([
         [1, 2, 3, 4],
         [4, 3, 2, 1],
         [1, 2, 3, 4],
@@ -136,7 +136,7 @@ fn test_is_movable() {
 #[test]
 fn test_move_tiles() {
     let mut tiles_state = TilesState::new();
-    tiles_state.game_state = Box::new(Tiles::new([[0; 4]; 4]));
+    tiles_state.game_state = Box::new([[0; 4]; 4].into());
     tiles_state.game_state[2][1] = 2;
     tiles_state.game_state[3][1] = 2;
     tiles_state.game_state[1][2] = 4;
@@ -144,7 +144,7 @@ fn test_move_tiles() {
     println!("{:?}", tiles_state.game_state);
     let (flag, i) = tiles_state.move_tiles(Direction::Right);
     assert_eq!(
-        tiles_state.game_state.as_array(),
+        *(*tiles_state.game_state).as_ref(),
         [[0; 4], [0; 4], [0; 4], [0, 4, 4, 8]]
     );
     assert_eq!(flag, true);

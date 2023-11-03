@@ -66,7 +66,7 @@ impl ProgressData {
             Ok(file) => file,
         };
         let mut buf_writer = BufWriter::new(file);
-        tiles.as_array().iter().for_each(|y| {
+        tiles.as_ref().iter().for_each(|y| {
             y.iter()
                 .for_each(|&x| match buf_writer.write(x.to_ne_bytes().as_slice()) {
                     Ok(_) => (),
@@ -100,7 +100,7 @@ impl ProgressData {
         });
         let score = read_int_from_bin(&mut buf_reader);
         if array != [[0; 4]; 4] {
-            Some((Tiles::new(array), score))
+            Some((array.into(), score))
         } else {
             None
         }
@@ -111,10 +111,10 @@ impl ProgressData {
 fn test_read() {
     use std::env;
     let data = ProgressData::new();
-    let tile = Tiles::new([[1, 2, 3, 4]; 4]);
+    let tile: Tiles = [[1, 2, 3, 4]; 4].into();
     let current_dir = env::current_dir().unwrap();
     let tile1 = data.read(&current_dir.join("test/test_read.dat"));
-    assert_eq!(tile1.as_ref().unwrap().0.as_array(), tile.as_array());
+    assert_eq!(*tile1.as_ref().unwrap().0.as_ref(), *tile.as_ref());
     assert_eq!(tile1.as_ref().unwrap().1, 4097);
 }
 
@@ -123,8 +123,8 @@ fn test_write() {
     use std::env;
     let current_dir = env::current_dir().unwrap();
     let data = ProgressData::new();
-    let tile = Tiles::new([[1, 2, 3, 4]; 4]);
-    let tile1 = Tiles::new([[5; 4]; 4]);
+    let tile: Tiles = [[1, 2, 3, 4]; 4].into();
+    let tile1: Tiles = [[5; 4]; 4].into();
     data.write(&current_dir.join("test/test_write.dat"), &tile, 4097);
     data.write(&current_dir.join("test/wrong.dat"), &tile1, 1000);
     let mut expected = match File::open(current_dir.join("test/test_write_expected.dat")) {

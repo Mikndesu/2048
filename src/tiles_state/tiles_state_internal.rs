@@ -33,8 +33,8 @@ macro_rules! reverse_if {
 impl TilesState {
     pub(crate) fn initialise_tile(&mut self) {
         let mut vec: Vec<(i32, i32)> = vec![];
-        self.game_state
-            .as_array()
+        (*self.game_state)
+            .as_ref()
             .iter()
             .enumerate()
             .for_each(|(i, y)| {

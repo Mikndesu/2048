@@ -24,6 +24,24 @@ pub struct Tiles {
     tiles: [[i32; 4]; 4],
 }
 
+impl From<[[i32; 4]; 4]> for Tiles {
+    fn from(value: [[i32; 4]; 4]) -> Self {
+        Tiles { tiles: value }
+    }
+}
+
+impl From<Tiles> for [[i32; 4]; 4] {
+    fn from(value: Tiles) -> Self {
+        value.tiles
+    }
+}
+
+impl AsRef<[[i32; 4]; 4]> for Tiles {
+    fn as_ref(&self) -> &[[i32; 4]; 4] {
+        &self.tiles
+    }
+}
+
 impl std::ops::Index<usize> for Tiles {
     type Output = [i32; 4];
     fn index(&self, index: usize) -> &Self::Output {
@@ -45,14 +63,6 @@ impl std::fmt::Display for Tiles {
 }
 
 impl Tiles {
-    pub fn new(array: [[i32; 4]; 4]) -> Self {
-        Self { tiles: array }
-    }
-
-    pub fn as_array(&self) -> [[i32; 4]; 4] {
-        self.tiles
-    }
-
     pub fn get_column(&self, i: i32) -> [i32; 4] {
         self.tiles[i as usize]
     }
@@ -87,7 +97,7 @@ impl Tiles {
 
 #[test]
 fn test_tiles_index_mut() {
-    let mut tiles = Tiles::new([[0; 4]; 4]);
+    let mut tiles: Tiles = [[0; 4]; 4].into();
     assert_eq!(tiles[0], [0, 0, 0, 0]);
     tiles[0] = [1; 4];
     assert_eq!(tiles[0], [1, 1, 1, 1]);
@@ -97,18 +107,19 @@ fn test_tiles_index_mut() {
 
 #[test]
 fn test_get_certain_column() {
-    let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
+    let tiles: Tiles = [[1, 2, 3, 4]; 4].into();
     assert_eq!(tiles.get_column(2), [1, 2, 3, 4]);
 }
 
 #[test]
 fn test_get_certain_row() {
-    let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
+    let tiles: Tiles = [[1, 2, 3, 4]; 4].into();
     assert_eq!(tiles.get_row(2), [3; 4]);
 }
 
 #[test]
 fn test_set_certain_row() {
-    let tiles = Tiles::new([[1, 2, 3, 4]; 4]);
-    assert_eq!(tiles.set_row(2, [5; 4]).as_array(), [[1, 2, 5, 4]; 4]);
+    let tiles: Tiles = [[1, 2, 3, 4]; 4].into();
+    let a: [[i32; 4]; 4] = (*tiles.set_row(2, [5; 4])).into();
+    assert_eq!(a, [[1, 2, 5, 4]; 4]);
 }

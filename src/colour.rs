@@ -28,3 +28,9 @@ pub enum Colour {
     Red,
     Yellow,
 }
+
+impl From<Colour> for i16 {
+    fn from(value: Colour) -> Self {
+        value as i16
+    }
+}

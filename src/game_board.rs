@@ -133,11 +133,11 @@ impl Drop for GameBoard {
 
 fn initialise_colour_pairs() {
     use crate::colour::Colour;
-    init_pair(Colour::White as i16, COLOR_WHITE, COLOR_BLACK);
-    init_pair(Colour::Green as i16, COLOR_GREEN, COLOR_BLACK);
-    init_pair(Colour::LightGreen as i16, 10, COLOR_BLACK);
-    init_pair(Colour::Magenta as i16, COLOR_MAGENTA, COLOR_BLACK);
-    init_pair(Colour::Cyan as i16, COLOR_CYAN, COLOR_BLACK);
-    init_pair(Colour::Red as i16, COLOR_RED, COLOR_BLACK);
-    init_pair(Colour::Yellow as i16, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(Colour::White.into(), COLOR_WHITE, COLOR_BLACK);
+    init_pair(Colour::Green.into(), COLOR_GREEN, COLOR_BLACK);
+    init_pair(Colour::LightGreen.into(), 10, COLOR_BLACK);
+    init_pair(Colour::Magenta.into(), COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(Colour::Cyan.into(), COLOR_CYAN, COLOR_BLACK);
+    init_pair(Colour::Red.into(), COLOR_RED, COLOR_BLACK);
+    init_pair(Colour::Yellow.into(), COLOR_YELLOW, COLOR_BLACK);
 }
